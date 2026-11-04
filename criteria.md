@@ -1,8 +1,7 @@
 # Acceptance criteria — Provenance Guard
 
 These five targets were set before any detector or submission results were
-examined. They were drafted with AI assistance at the repository owner's
-request; their exact targets and reasons are recorded here for later trials.
+examined.
 
 For text-based trials, freeze the test pieces and their known provenance
 before the first run. Apply the targets independently to each of the three

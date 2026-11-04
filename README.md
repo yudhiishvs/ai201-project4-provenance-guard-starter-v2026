@@ -197,9 +197,7 @@ $ curl -sS 'http://127.0.0.1:5000/log?limit=2'
 
 ## How I Used AI
 
-Codex completed this repository in response to the owner's requests. The
-criteria are AI-assisted, as `criteria.md` states; no student-only authorship
-is claimed for them.
+Codex completed this repository in response to the owner's requests.
 
 **Moment 1**
 
