@@ -1,134 +1,63 @@
 # Acceptance criteria — Provenance Guard
 
-Five criteria that say what "working" means for this service, written in unit 7
-**before** you built it.
+These five targets were set before any detector or submission results were
+examined. They are **AI-drafted proposals** for the repository owner to review
+and adopt or revise before submission. The source brief asks the student to
+write and defend their own criteria; this file does not claim otherwise.
 
-**All five are yours.** None are given.
+For text-based trials, freeze the test pieces and their known provenance
+before the first run. Apply the targets independently to each of the three
+trials in the next unit, without changing thresholds between trials.
 
-An acceptance criterion names a number or something plainly observable. *"The
-detector is accurate"* is an opinion — and perfect AI detection isn't possible
-anyway, so it's an opinion about something nobody can deliver. *"Of 10 pieces I
-wrote myself, at most 1 is labelled high-confidence AI"* is a criterion.
+## 1. Limit false accusations of human writing
 
-Under each, write a sentence or two on **why that target**. *"I allow at most 1
-false positive in 10 because on a writing site a wrong accusation costs more
-than a missed detection"* is a real answer.
+Of 20 preselected human-written pieces of 80–200 words, including at least
+five deliberately plain pieces, **at most one** may receive the
+high-confidence AI label in each trial.
 
-> Missing your own targets next unit costs you nothing. Setting a target so
-> easy you can't miss it does.
+**Why this target:** A wrong accusation has a direct cost for the writer. A
+5% ceiling is demanding enough to reveal whether ordinary prose is being
+mistaken for generated text.
 
----
+## 2. Separate known AI and human samples
 
-## Pick numbers you can defend
+For ten preselected AI-generated pieces and ten preselected human-written
+pieces of 80–200 words, the **median combined AI-likelihood score** of the AI
+group must exceed the human group's median by **at least 0.15** in each trial.
 
-**Cover at least three of these five areas.** They're prompts, not a form.
+**Why this target:** A score spread smaller than 0.15 gives the site little
+practical reason to use the detector, even if most individual labels say
+"unsure." Group medians avoid letting one odd sample decide the result.
 
-| Area | A question it could answer |
-|---|---|
-| False positives | How often may a human's writing get called AI? |
-| Score spread | How far apart should clearly-AI and clearly-human text score? |
-| Label coverage | Is every one of your three labels actually reachable? |
-| The appeal path | Does an appeal always change status and always get recorded? |
-| Bad input | What happens when `text` is missing, empty, or enormous? |
+## 3. Make all three labels reachable
 
-Two things worth knowing before you pick numbers:
+Across a frozen set of **at least 12** mixed-provenance submissions, each of
+`human`, `unsure`, and `ai` must appear **at least once** in each trial.
+Separately, `score_to_label` must return one of those three labels for every
+score in **0.00, 0.01, ..., 1.00**, with no gap or exception.
 
-- **The expensive mistake is one-sided.** Missing some AI text costs the site a
-  little. Accusing a real writer costs that person a lot. A criterion that
-  treats both errors as equally bad is describing a system nobody would ship.
-- **Unit 8 tests across three trials, and the target has to hold across all
-  three.** Your first signal runs a model, so identical input can score
-  differently twice. A target of "at most 1 in 10" against trials of 2, 1, 2 is
-  a **miss**.
+**Why this target:** The service promises three reader-facing outcomes. A
+label that no real submission can reach is not a working option, while the
+grid check catches holes at threshold boundaries.
 
----
-## 1.
+## 4. Preserve every valid appeal
 
-<!-- Your criterion. It must name a number. -->
+For **ten** valid, distinct `content_id` values, **ten of ten** appeals must
+return `under_review` and append an appeal event containing the submitted
+reasoning. Each original decision and its two signal scores must remain in
+the audit log unchanged. An unknown id must return **404** and append no
+appeal event.
 
+**Why this target:** An appeal is a writer's only way to challenge a false
+accusation. Losing even one would undermine the safety of the workflow.
 
+## 5. Reject malformed or oversized submissions predictably
 
-**Why this target:**
+For each of these **six** inputs — no JSON object, missing `text`, blank
+`text`, non-string `text`, missing `creator_id`, and text over **10,000
+characters** — `POST /submit` must return JSON with an `error` and `message`,
+use **400** or **413**, create **zero decision entries**, and never return 500.
 
-
-
----
-
-## 2.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
-
----
-
-## 3.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
-
----
-
-## 4.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
-
----
-
-## 5.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
-
----
-
-<!-- ─────────────────────────────────────────────────────────────────────────
-     UNIT 8 — read this before you change anything above.
-
-     If a criterion turns out to be BROKEN rather than merely unmet, you can
-     revise it, and that earns credit. But never delete or edit the original
-     line. Add the revision underneath, like this:
-
-         ## 2. Uncertain cases land in the unsure band
-
-         The system handles uncertain cases well.
-
-         **Why this target:** ...
-
-         > **Revised in unit 8:** Text I judged borderline scores between
-         > 0.4 and 0.6 in at least 4 of 5 cases.
-         >
-         > **Why revised:** "well" gave me nothing to check. I couldn't
-         > reach a verdict from it at all.
-
-     That's a revision because the criterion couldn't be MEASURED.
-
-     Lowering a target because you missed it is not a revision, and it costs
-     you the point:
-
-         ✗ "At most 1 of 10 of my own pieces flagged as AI" → "at most 3
-            of 10", because 1 of 10 turned out to be hard.
-
-     A number you missed stays where it is, gets diagnosed, and gets a fix
-     attempted. That's where the points are.
-     ───────────────────────────────────────────────────────────────────────── -->
+**Why this target:** Bad input should be a clear caller error, not an
+expensive model call or an unexplained server failure. The size cap also
+limits work a single request can impose.
