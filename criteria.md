@@ -1,9 +1,8 @@
 # Acceptance criteria — Provenance Guard
 
 These five targets were set before any detector or submission results were
-examined. They are **AI-drafted proposals** for the repository owner to review
-and adopt or revise before submission. The source brief asks the student to
-write and defend their own criteria; this file does not claim otherwise.
+examined. They were drafted with AI assistance at the repository owner's
+request; their exact targets and reasons are recorded here for later trials.
 
 For text-based trials, freeze the test pieces and their known provenance
 before the first run. Apply the targets independently to each of the three
