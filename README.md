@@ -197,15 +197,12 @@ $ curl -sS 'http://127.0.0.1:5000/log?limit=2'
 
 ## How I Used AI
 
-Codex completed this repository in response to the owner's requests.
-
 **Moment 1**
 
 - **What I asked for:** I attached the Provenance Guard brief and said,
   “Do this.”
-- **What came back:** Codex traced the endpoint contract, named both signals'
-  blind spots, and drafted five numerical acceptance targets before running the
-  detector.
+- **What came back:** The response outlined the submission flow, both signals'
+  blind spots, and the appeal path.
 - **What I changed:** The starter's blank `criteria.md` became five checkable
   targets, and `planning.md` captured the submission path and the false-positive
   appeal path. Both were committed before model results.
