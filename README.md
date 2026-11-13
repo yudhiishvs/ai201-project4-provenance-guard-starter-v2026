@@ -2335,3 +2335,20 @@ and missed generated text.
 ---
 
 📖 **How to run this project: [RUNNING.md](RUNNING.md)**
+
+## Capstone
+
+**What This Extends**
+
+This extends Provenance Guard, the local writing-submission service built in
+the previous two units. The new part is an operational run path: a single
+command starts a local server, and each submission leaves a timed, structured
+record that can be examined after the request finishes.
+
+**The Shape**
+
+I chose **Shape A — Deploy and instrument**, using **Path B — local with logs**.
+The extension is the run path, submission instrumentation, and measurements
+from actual requests. I am leaving the detector model, score thresholds, and
+appeal workflow out of scope so the capstone measures the operational layer
+without changing the earlier system's judgments.
