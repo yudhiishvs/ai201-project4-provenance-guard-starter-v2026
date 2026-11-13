@@ -35,12 +35,12 @@
 
 **Interfaces:** Keep `POST /submit`, `GET /health`, `GET /log`, and `audit.log_rejection` signatures. Use 10/minute and 200/day per valid creator ID, falling back to address for malformed or absent IDs.
 
-- [ ] Add a service test for ten accepted submissions, then a JSON 429 and rejection log on the eleventh, and for malformed JSON to remain a JSON 400 when under limit.
-- [ ] Run that test and confirm it fails because limiting is off.
-- [ ] Enable `RATE_LIMITING_ENABLED` and the existing decorator, leaving scoring and labels untouched.
-- [ ] Run the focused test and the complete existing test suite; inspect one nine-field decision and one rejection through `/log`.
-- [ ] Run `python run_attacks.py --flood 15` against the local service; record status codes and the chosen-limit explanation.
-- [ ] Commit instrumentation and evidence.
+- [x] Add a service test for ten accepted submissions, then a JSON 429 and rejection log on the eleventh, and for malformed JSON to remain a JSON 400 when under limit.
+- [x] Run that test and confirm it fails because limiting is off.
+- [x] Enable `RATE_LIMITING_ENABLED` and the existing decorator, leaving scoring and labels untouched.
+- [x] Run the focused test and the complete existing test suite; inspect one nine-field decision and one rejection through `/log`.
+- [x] Run `python run_attacks.py --flood 15` against the local service; record status codes and the chosen-limit explanation.
+- [x] Commit instrumentation and evidence.
 
 ### Task 2: Freeze scenarios and run the unmodified detector
 
@@ -48,12 +48,12 @@
 
 **Interfaces:** Keep `python run_eval.py --label before|after`; add only evaluation support needed for the existing criteria, including appeal actions and label-grid checks. Use the same frozen inputs in both runs.
 
-- [ ] Record 20 verified user-written pieces (five plain), ten known AI pieces, ten known human pieces, at least 12 mixed-provenance pieces, ten valid appeals, and six specified malformed bodies before testing.
-- [ ] Add a failing evaluation test for criterion-specific output, including appeal evidence and the label grid; then implement runner support and run the full suite.
-- [ ] After Task 1, unpack the staff zip into the repo, read headers only, and run every attack once with `--label before`.
-- [ ] Run all five criteria with three trials using `--label before` and retain the generated report.
-- [ ] Classify every attack, calculate the criterion verdicts, paste real output and ten audit entries including a rejection, and diagnose every miss.
-- [ ] Commit frozen scenarios and before-run evidence.
+- [x] Record 20 user-supplied pieces represented as own writing (five plain), ten known AI pieces, ten known human pieces, at least 12 mixed-provenance pieces, ten valid appeals, and six specified malformed bodies before testing.
+- [x] Add a failing evaluation test for criterion-specific output, including appeal evidence and the label grid; then implement runner support and run the full suite.
+- [x] After Task 1, unpack the staff zip into the repo, read headers only, and run every attack once with `--label before`.
+- [x] Run all five criteria with three trials using `--label before` and retain the generated report.
+- [x] Classify every attack, calculate the criterion verdicts, paste real output and ten audit entries including a rejection, and diagnose every miss.
+- [x] Commit frozen scenarios and before-run evidence.
 
 ### Task 3: One improvement and the matching after run
 
@@ -61,11 +61,11 @@
 
 **Interfaces:** Preserve response and audit field names. Choose the single change from the measured diagnosis, and document its exact value or validation rule.
 
-- [ ] Write a focused failing test for the one observed failure mechanism, then make the smallest service change that addresses it.
-- [ ] Run the focused test and full suite.
-- [ ] Run the complete attack set with `--label after` and all five frozen criteria with `--label after`.
-- [ ] Place before and after outcomes side by side and state gains and regressions.
-- [ ] Commit the improvement and after-run evidence.
+- [x] Write a focused failing test for the one observed failure mechanism, then make the smallest service change that addresses it.
+- [x] Run the focused test and full suite.
+- [x] Run the complete attack set with `--label after` and all five frozen criteria with `--label after`.
+- [x] Place before and after outcomes side by side and state gains and regressions.
+- [x] Commit the improvement and after-run evidence.
 
 ### Task 4: Finish the evidence and audit
 
@@ -73,7 +73,7 @@
 
 **Interfaces:** Keep all original criterion targets and all evidence as pasted text.
 
-- [ ] Verify every attack has an outcome and held/broke mark and every criterion has three before and three after trials with MET/MISSED verdicts.
-- [ ] Explain every remaining failure, next fix, reason for stopping, and the production trade in two sentences; update “How I Used AI.”
-- [ ] Run `python test.py`, the full unittest suite, and audit the README against the submission checklist.
-- [ ] Make the fourth local commit and report the branch, commit range, evidence files, and any unavailable input honestly.
+- [x] Verify every attack has an outcome and held/broke mark and every criterion has three before and three after trials with MET/MISSED verdicts.
+- [x] Explain every remaining failure, next fix, reason for stopping, and the production trade in two sentences; update “How I Used AI.”
+- [x] Run `python test.py`, the full unittest suite, and audit the README against the submission checklist.
+- [x] Make the fourth local commit and report the branch, commit range, evidence files, and any unavailable input honestly.

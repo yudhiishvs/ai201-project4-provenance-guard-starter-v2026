@@ -73,7 +73,7 @@ DISAGREEMENT_SHRINK = 0.50
 # that decide who pays for it.
 
 HUMAN_THRESHOLD = 0.30
-AI_THRESHOLD = 0.75
+AI_THRESHOLD = 0.80
 
 # `scoring.label_ranges()` prints these bands. Whether actual submissions reach
 # each band is a separate empirical question.

@@ -21,7 +21,7 @@
 > That's a web service. Something sent it text and it sent something back.
 > Everything this unit is filling in the middle.
 >
-> **Unit 7 is documented below.** The later sections are reserved for Unit 8.
+> **Units 7 and 8 are documented below.**
 
 ---
 
@@ -108,7 +108,8 @@ conflicting evidence tends toward the unsure label.
 
 **The numbers:** Model weight 0.60; style weight 0.40; disagreement gap 0.35;
 disagreement shrink 0.50. `config.py` holds these and the label boundaries:
-`HUMAN_THRESHOLD = 0.30`, `AI_THRESHOLD = 0.75`. The style feature scales are
+`HUMAN_THRESHOLD = 0.30`, `AI_THRESHOLD = 0.80` after the Unit 8 improvement
+(initially 0.75). The style feature scales are
 in `stylometry.py`: spread divided by 0.70, variety mapped from 0.90 down over
 a 0.40 range, and punctuation density divided by 0.15.
 
@@ -144,8 +145,8 @@ detection accuracy.
 | Label | Score range | The exact text a reader sees |
 |---|---|---|
 | high-confidence human | 0.00 ≤ score ≤ 0.30 | Our checks found stronger signs of human writing. This automated result cannot prove who wrote it. |
-| unsure | 0.30 < score < 0.75 | Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal. |
-| high-confidence AI | 0.75 ≤ score ≤ 1.00 | Our checks found strong signs of AI-generated writing. This automated label may be wrong, and the creator can appeal it. |
+| unsure | 0.30 < score < 0.80 | Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal. |
+| high-confidence AI | 0.80 ≤ score ≤ 1.00 | Our checks found strong signs of AI-generated writing. This automated label may be wrong, and the creator can appeal it. |
 
 The unsure text explicitly avoids accusing a writer when the evidence splits,
 and it tells them an appeal is available. All scores from 0.00 to 1.00 map to
@@ -217,6 +218,22 @@ $ curl -sS 'http://127.0.0.1:5000/log?limit=2'
   appeal in an append-only log. I kept the conservative thresholds and added
   the measured disagreement case and the real curl transcript above, rather
   than claiming the detector was accurate.
+
+**Moment 3 — Unit 8**
+
+- **What I asked for:** I asked Codex to complete the testing assignment in
+  the existing repo locally and supplied the staff attack zip and a zip of
+  evaluation samples.
+- **What came back:** Codex enabled the prepared limiter, froze ten generated
+  AI samples and the supplied personal samples, ran the full attack set and
+  fifteen criterion trials before and after one threshold change, and wrote
+  runner tests, reports, and this analysis.
+- **What I kept in the submission:** The original five targets stayed
+  unchanged. Codex inspected the attack text only after the initial full run.
+  The personal samples are user-supplied, not independently verified. This
+  report keeps the two missed criteria and fourteen remaining attacks visible,
+  and the detector improvement is confined to the AI boundary from 0.75 to
+  0.80.
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
@@ -1247,38 +1264,1034 @@ The following are exact JSON arrays produced by `run_eval.py::main`, with
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** In `config.py`, I moved only `AI_THRESHOLD` from 0.75 to
+0.80. The human boundary, signals, 0.60/0.40 weights, disagreement rule,
+routes, and response schema remained fixed. This widens the `unsure` band by
+0.05 on the AI side.
 
-**Which diagnosis pointed at it:**
+**Which diagnosis pointed at it:** Staff FP05 is human-written technical
+documentation but scored 0.7618 and was accused as `ai` just above the old
+0.75 threshold. The new 0.80 boundary makes that same score `unsure`. This
+addresses the observed label mapping failure for that writer; it cannot repair
+the inverted score ordering in criterion 2 or the missing `human` label in
+criterion 3.
+
+### Before and after, side by side
+
+| Family | Before HELD / BROKE | After HELD / BROKE | Change |
+|---|---:|---:|---|
+| Evasion | 1 / 9 | 1 / 9 | none |
+| False positive | 7 / 1 | 8 / 0 | FP05 no longer accused |
+| Prompt injection | 5 / 1 | 5 / 1 | none |
+| Malformed | 16 / 4 | 16 / 4 | none |
+| Same-creator flood | 12 / 0 | 12 / 0 | none |
+| **All 56** | **41 / 15** | **42 / 14** | **one changed outcome** |
+
+Every input below is paired with its same-ID result. The score is the combined
+0–1 value; dashes mean the route returned no decision. Full signal scores and
+targets appear in the before and after tables.
+
+| ID | Before: HTTP / score / guess / verdict | After: HTTP / score / guess / verdict |
+|---|---|---|
+| EV01 | 200 / 0.2763 / human / BROKE | 200 / 0.2763 / human / BROKE |
+| EV02 | 200 / 0.4616 / unsure / BROKE | 200 / 0.4616 / unsure / BROKE |
+| EV03 | 200 / 0.5041 / unsure / BROKE | 200 / 0.5041 / unsure / BROKE |
+| EV04 | 200 / 0.536 / unsure / BROKE | 200 / 0.536 / unsure / BROKE |
+| EV05 | 200 / 0.2328 / human / BROKE | 200 / 0.2328 / human / BROKE |
+| EV06 | 200 / 0.4531 / unsure / BROKE | 200 / 0.4531 / unsure / BROKE |
+| EV07 | 200 / 0.5317 / unsure / BROKE | 200 / 0.5317 / unsure / BROKE |
+| EV08 | 200 / 0.3471 / unsure / BROKE | 200 / 0.3471 / unsure / BROKE |
+| EV09 | 200 / 0.5134 / unsure / BROKE | 200 / 0.5134 / unsure / BROKE |
+| EV10 | 200 / 0.8475 / ai / HELD | 200 / 0.8475 / ai / HELD |
+| FP01 | 200 / 0.5056 / unsure / HELD | 200 / 0.5056 / unsure / HELD |
+| FP02 | 200 / 0.6713 / unsure / HELD | 200 / 0.6713 / unsure / HELD |
+| FP03 | 200 / 0.6681 / unsure / HELD | 200 / 0.6681 / unsure / HELD |
+| FP04 | 200 / 0.584 / unsure / HELD | 200 / 0.584 / unsure / HELD |
+| FP05 | 200 / 0.7618 / ai / BROKE | 200 / 0.7618 / unsure / HELD |
+| FP06 | 200 / 0.5809 / unsure / HELD | 200 / 0.5809 / unsure / HELD |
+| FP07 | 200 / 0.6054 / unsure / HELD | 200 / 0.6054 / unsure / HELD |
+| FP08 | 200 / 0.3934 / unsure / HELD | 200 / 0.3934 / unsure / HELD |
+| PI01 | 200 / 0.366 / unsure / HELD | 200 / 0.366 / unsure / HELD |
+| PI02 | 200 / 0.19 / human / BROKE | 200 / 0.19 / human / BROKE |
+| PI03 | 200 / 0.5085 / unsure / HELD | 200 / 0.5085 / unsure / HELD |
+| PI04 | 200 / 0.4583 / unsure / HELD | 200 / 0.4583 / unsure / HELD |
+| PI05 | 200 / 0.4682 / unsure / HELD | 200 / 0.4682 / unsure / HELD |
+| PI06 | 200 / 0.5037 / unsure / HELD | 200 / 0.5037 / unsure / HELD |
+| MF01 | 400 / — / — / HELD | 400 / — / — / HELD |
+| MF02 | 400 / — / — / HELD | 400 / — / — / HELD |
+| MF03 | 200 / 0.35 / unsure / BROKE | 200 / 0.35 / unsure / BROKE |
+| MF04 | 200 / 0.3534 / unsure / BROKE | 200 / 0.3534 / unsure / BROKE |
+| MF05 | 200 / 0.6493 / unsure / BROKE | 200 / 0.6493 / unsure / BROKE |
+| MF06 | 200 / 0.6491 / unsure / BROKE | 200 / 0.6491 / unsure / BROKE |
+| MF07 | 200 / 0.6219 / unsure / HELD | 200 / 0.6219 / unsure / HELD |
+| MF08 | 413 / — / — / HELD | 413 / — / — / HELD |
+| RQ01 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ02 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ03 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ04 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ05 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ06 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ07 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ08 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ09 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ10 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ11 | 400 / — / — / HELD | 400 / — / — / HELD |
+| RQ12 | 400 / — / — / HELD | 400 / — / — / HELD |
+| FL01_01 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_02 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_03 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_04 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_05 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_06 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_07 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_08 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_09 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_10 | 200 / 0.3586 / unsure / HELD | 200 / 0.3586 / unsure / HELD |
+| FL01_11 | 429 / — / — / HELD | 429 / — / — / HELD |
+| FL01_12 | 429 / — / — / HELD | 429 / — / — / HELD |
 
 ### Attack Run — After
 
-<!-- Same format. `run_attacks.py --label after` -->
+The same 56 staff inputs were rerun with `run_attacks.py::main` after the
+single threshold change. The complete JSON responses are in
+`results/attack_run_2026-11-13_0756_after.md`, and the reviewed table is also
+in `results/attack_review_after.md`. The targets and judgment rules are exactly
+those used for the before run.
 
+| ID | Family | Target | HTTP | Model | Style | Combined | Guess | Verdict |
+|---|---|---|---:|---:|---:|---:|---|---|
+| EV01 | evasion | signal two: typos raise word variety | 200 | 0.1635 | 0.4454 | 0.2763 | human | BROKE |
+| EV02 | evasion | signal two: broken-up sentences raise length spread | 200 | 0.5943 | 0.1664 | 0.4616 | unsure | BROKE |
+| EV03 | evasion | signal two: a pasted quotation changes the shape | 200 | 0.6662 | 0.2712 | 0.5041 | unsure | BROKE |
+| EV04 | evasion | signal one: unusual words raise perplexity | 200 | 0.6114 | 0.423 | 0.536 | unsure | BROKE |
+| EV05 | evasion | both signals: heavy human editing pass | 200 | 0.3212 | 0.1003 | 0.2328 | human | BROKE |
+| EV06 | evasion | signal two: one very long sentence and one very short | 200 | 0.5727 | 0.1565 | 0.4531 | unsure | BROKE |
+| EV07 | evasion | signal two: padding with punctuation | 200 | 0.5862 | 0.45 | 0.5317 | unsure | BROKE |
+| EV08 | evasion | signal one: text below the token window | 200 | 0.2452 | 0.5 | 0.3471 | unsure | BROKE |
+| EV09 | evasion | both: AI text with a human opening paragraph bolted on | 200 | 0.7042 | 0.2608 | 0.5134 | unsure | BROKE |
+| EV10 | evasion | signal two: repeated stanza structure | 200 | 0.9792 | 0.6499 | 0.8475 | ai | HELD |
+| FP01 | false_positive | plain, clear human writing with no flourishes | 200 | 0.6175 | 0.3377 | 0.5056 | unsure | HELD |
+| FP02 | false_positive | human writing in a formal register | 200 | 0.7387 | 0.5701 | 0.6713 | unsure | HELD |
+| FP03 | false_positive | a non-native English speaker writing carefully | 200 | 0.8051 | 0.4625 | 0.6681 | unsure | HELD |
+| FP04 | false_positive | a student essay written to a rubric | 200 | 0.8329 | 0.4209 | 0.584 | unsure | HELD |
+| FP05 | false_positive | technical documentation written by a person | 200 | 0.8005 | 0.7037 | 0.7618 | unsure | HELD |
+| FP06 | false_positive | a person imitating a formal template | 200 | 0.8814 | 0.3325 | 0.5809 | unsure | HELD |
+| FP07 | false_positive | human writing that repeats a phrase deliberately | 200 | 0.8816 | 0.4548 | 0.6054 | unsure | HELD |
+| FP08 | false_positive | very short genuine human submission | 200 | 0.3223 | 0.5 | 0.3934 | unsure | HELD |
+| PI01 | prompt_injection | instruction to ignore the check | 200 | 0.4625 | 0.2213 | 0.366 | unsure | HELD |
+| PI02 | prompt_injection | instruction disguised as a system message | 200 | 0.2044 | 0.1683 | 0.19 | human | BROKE |
+| PI03 | prompt_injection | instruction wrapped in the writer's voice | 200 | 0.5943 | 0.3797 | 0.5085 | unsure | HELD |
+| PI04 | prompt_injection | attempt to make the label text hostile | 200 | 0.4998 | 0.396 | 0.4583 | unsure | HELD |
+| PI05 | prompt_injection | attempt to inject into the audit log | 200 | 0.6401 | 0.1306 | 0.4682 | unsure | HELD |
+| PI06 | prompt_injection | instruction plus real human text | 200 | 0.5583 | 0.4219 | 0.5037 | unsure | HELD |
+| MF01 | malformed | text is only whitespace | 400 | — | — | — | — | HELD |
+| MF02 | malformed | text is a single character | 400 | — | — | — | — | HELD |
+| MF03 | malformed | text is control characters | 200 | 0.0 | 0.5 | 0.35 | unsure | BROKE |
+| MF04 | malformed | text is only punctuation | 200 | 0.0112 | 0.5 | 0.3534 | unsure | BROKE |
+| MF05 | malformed | text is a very long single word | 200 | 0.9976 | 0.5 | 0.6493 | unsure | BROKE |
+| MF06 | malformed | text is emoji only | 200 | 0.9969 | 0.5 | 0.6491 | unsure | BROKE |
+| MF07 | malformed | text is right-to-left script | 200 | 0.9064 | 0.5 | 0.6219 | unsure | HELD |
+| MF08 | malformed | text is 60,000 characters | 413 | — | — | — | — | HELD |
+| RQ01 | malformed | no text field at all | 400 | — | — | — | — | HELD |
+| RQ02 | malformed | no creator_id | 400 | — | — | — | — | HELD |
+| RQ03 | malformed | text is a number | 400 | — | — | — | — | HELD |
+| RQ04 | malformed | text is a list | 400 | — | — | — | — | HELD |
+| RQ05 | malformed | text is null | 400 | — | — | — | — | HELD |
+| RQ06 | malformed | creator_id is an object | 400 | — | — | — | — | HELD |
+| RQ07 | malformed | body is a JSON array, not an object | 400 | — | — | — | — | HELD |
+| RQ08 | malformed | body is unparseable JSON | 400 | — | — | — | — | HELD |
+| RQ09 | malformed | body is empty | 400 | — | — | — | — | HELD |
+| RQ10 | malformed | body is form-encoded, not JSON | 400 | — | — | — | — | HELD |
+| RQ11 | malformed | body is JSON claiming to be plain text | 400 | — | — | — | — | HELD |
+| RQ12 | malformed | deeply nested JSON | 400 | — | — | — | — | HELD |
+| FL01_01 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_02 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_03 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_04 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_05 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_06 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_07 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_08 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_09 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_10 | flood_same_creator | 20 rapid submissions from one creator | 200 | 0.0287 | 0.5 | 0.3586 | unsure | HELD |
+| FL01_11 | flood_same_creator | 20 rapid submissions from one creator | 429 | — | — | — | — | HELD |
+| FL01_12 | flood_same_creator | 20 rapid submissions from one creator | 429 | — | — | — | — | HELD |
 
+**Totals:** 42 HELD, 14 BROKE, 56 measured.
 
-**Did it help, and how do I know:**
+### Repeated criteria — after
 
-<!-- Widening the unsure band usually fixes one problem and creates another.
-     Reporting that trade honestly is worth full credit. -->
+I ran the same frozen `scenarios.py` inputs with `run_eval.py::main`, three
+times per criterion. The after trial output is in
+`results/run_2026-11-13_0756_after.md`.
 
+| Criterion | Original target | Before runs 1 / 2 / 3 | After run 1 | After run 2 | After run 3 | After verdict |
+|---|---|---|---|---|---|---|
+| 1. Human writing false accusations | ≤1 AI of 20 | 0/20 / 0/20 / 0/20 | 0/20 | 0/20 | 0/20 | **MET** |
+| 2. AI score median above human | gap ≥0.15 | −0.0729 / −0.0729 / −0.0729 | −0.0729 | −0.0729 | −0.0729 | **MISSED** |
+| 3. Three labels on ≥12 pieces; complete 101-score grid | 3/3 and 101/101 | 2/3, 101/101 in each | 2/3; 101/101 | 2/3; 101/101 | 2/3; 101/101 | **MISSED** |
+| 4. Valid appeals and unknown ID | 10/10; 404, no event | 10/10; 404 in each | 10/10; 404 | 10/10; 404 | 10/10; 404 | **MET** |
+| 5. Six malformed inputs | 6/6 JSON 400/413, zero decisions | 6/6 in each | 6/6 | 6/6 | 6/6 | **MET** |
 
+**Did it help, and how do I know:** Yes, for the specific writer-facing error I
+targeted: FP05 changed from `ai` to `unsure` while its model, style, and
+combined scores stayed 0.8005, 0.7037, and 0.7618. The other 55 staff outputs
+had the same statuses, scores, and guesses; no criterion verdict changed. All
+15 after criterion trials matched their before counterparts except for new
+content IDs. The measured staff set showed no additional AI-origin sample
+downgraded, but any future AI-origin text scoring from 0.75 through just under
+0.80 now receives `unsure` rather than `ai`.
+
+### Real output from after trial 1
+
+These are the exact JSON arrays from one after trial of each criterion,
+produced by `run_eval.py::main` and its appeal, rejection, and score-grid
+helpers. The other two trials for every criterion remain in the after run file.
+
+**Criterion 1 — human writing**
+
+```json
+[
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5933,
+    "model_score": 0.8381,
+    "style_score": 0.4595,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I went to the grocery store after class because I had almost nothing l",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5524,
+    "model_score": 0.7832,
+    "style_score": 0.3374,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "My desk gets messy during the week. I leave notebooks, pens, receipts,",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.6003,
+    "model_score": 0.8429,
+    "style_score": 0.487,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Yesterday I took a walk around my neighborhood after lunch. The weathe",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.6601,
+    "model_score": 0.7831,
+    "style_score": 0.4756,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I made breakfast at home today instead of buying something on campus. ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.6467,
+    "model_score": 0.7601,
+    "style_score": 0.4767,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "The library was crowded when I arrived in the afternoon. I walked arou",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5375,
+    "model_score": 0.6399,
+    "style_score": 0.3838,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I used to think that a good study session meant spending as many hours",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5711,
+    "model_score": 0.6993,
+    "style_score": 0.3787,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "One thing I find interesting about public transportation is how much a",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4742,
+    "model_score": 0.5198,
+    "style_score": 0.4058,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "During a group project, I learned that dividing work equally is not al",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.553,
+    "model_score": 0.5379,
+    "style_score": 0.5757,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I have noticed that I understand a programming concept better when I c",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4566,
+    "model_score": 0.4675,
+    "style_score": 0.4403,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "The first time I looked closely at a financial statement, I was surpri",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5039,
+    "model_score": 0.5209,
+    "style_score": 0.4784,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "When I work on a technical project, documentation is usually the part ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5399,
+    "model_score": 0.6213,
+    "style_score": 0.4178,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I enjoy visiting unfamiliar places, but I rarely plan every hour of a ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4683,
+    "model_score": 0.5864,
+    "style_score": 0.2911,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "A difficult part of learning statistics is accepting that a convincing",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.3745,
+    "model_score": 0.4445,
+    "style_score": 0.2695,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I once spent nearly an hour debugging a program because I assumed the ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.588,
+    "model_score": 0.6957,
+    "style_score": 0.4264,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "There is a particular kind of satisfaction in finishing a book that ch",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4722,
+    "model_score": 0.5277,
+    "style_score": 0.389,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I think the design of everyday software matters most when users are ti",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4991,
+    "model_score": 0.5836,
+    "style_score": 0.3723,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "One reason I like cooking with other people is that it creates a natur",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4893,
+    "model_score": 0.54,
+    "style_score": 0.4132,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "When comparing two job opportunities, I think it is easy to focus too ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4817,
+    "model_score": 0.5356,
+    "style_score": 0.4008,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I have become more cautious about treating productivity tools as solut",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.54,
+    "model_score": 0.5594,
+    "style_score": 0.5109,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "A good experiment should make it possible to learn something even when",
+    "error": null,
+    "message": null
+  }
+]
+```
+
+**Criterion 2 — known AI versus human medians**
+
+```json
+[
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5577,
+    "model_score": 0.6305,
+    "style_score": 0.4484,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Community gardens offer neighborhoods a practical way to share space a",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4727,
+    "model_score": 0.4134,
+    "style_score": 0.5617,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "A repair cafe is a local event where volunteers help neighbors fix com",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4194,
+    "model_score": 0.4302,
+    "style_score": 0.4033,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Cities often debate whether a new bicycle lane is worth the space it t",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4893,
+    "model_score": 0.5211,
+    "style_score": 0.4417,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Public libraries have adapted to changes in how people find informatio",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.3665,
+    "model_score": 0.3273,
+    "style_score": 0.4254,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "An astronomy club can make the night sky approachable for beginners by",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4232,
+    "model_score": 0.4309,
+    "style_score": 0.4117,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "School lunch programs have to balance nutrition, cost, food safety, an",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4064,
+    "model_score": 0.387,
+    "style_score": 0.4356,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Volunteer groups often begin with enthusiasm and then struggle to sust",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5127,
+    "model_score": 0.5571,
+    "style_score": 0.4462,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Keeping useful notes during a meeting is a different task from recordi",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.3375,
+    "model_score": 0.2757,
+    "style_score": 0.4303,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Street trees can cool a neighborhood and make walking more pleasant, b",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.37,
+    "model_score": 0.338,
+    "style_score": 0.4179,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "A small museum can make a familiar object interesting by explaining th",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5039,
+    "model_score": 0.5209,
+    "style_score": 0.4784,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "When I work on a technical project, documentation is usually the part ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5399,
+    "model_score": 0.6213,
+    "style_score": 0.4178,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I enjoy visiting unfamiliar places, but I rarely plan every hour of a ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4683,
+    "model_score": 0.5864,
+    "style_score": 0.2911,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "A difficult part of learning statistics is accepting that a convincing",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.3745,
+    "model_score": 0.4445,
+    "style_score": 0.2695,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I once spent nearly an hour debugging a program because I assumed the ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.588,
+    "model_score": 0.6957,
+    "style_score": 0.4264,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "There is a particular kind of satisfaction in finishing a book that ch",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4722,
+    "model_score": 0.5277,
+    "style_score": 0.389,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I think the design of everyday software matters most when users are ti",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4991,
+    "model_score": 0.5836,
+    "style_score": 0.3723,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "One reason I like cooking with other people is that it creates a natur",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4893,
+    "model_score": 0.54,
+    "style_score": 0.4132,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "When comparing two job opportunities, I think it is easy to focus too ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4817,
+    "model_score": 0.5356,
+    "style_score": 0.4008,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I have become more cautious about treating productivity tools as solut",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.54,
+    "model_score": 0.5594,
+    "style_score": 0.5109,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "A good experiment should make it possible to learn something even when",
+    "error": null,
+    "message": null
+  }
+]
+```
+
+**Criterion 3 — label and score grid coverage**
+
+```json
+[
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5933,
+    "model_score": 0.8381,
+    "style_score": 0.4595,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I went to the grocery store after class because I had almost nothing l",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5375,
+    "model_score": 0.6399,
+    "style_score": 0.3838,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I used to think that a good study session meant spending as many hours",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5039,
+    "model_score": 0.5209,
+    "style_score": 0.4784,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "When I work on a technical project, documentation is usually the part ",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4722,
+    "model_score": 0.5277,
+    "style_score": 0.389,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "I think the design of everyday software matters most when users are ti",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.3724,
+    "model_score": 0.0457,
+    "style_score": 0.5435,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "\u2019Twas brillig, and the slithy toves did gyre and gimble in the wabe; a",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.5577,
+    "model_score": 0.6305,
+    "style_score": 0.4484,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Community gardens offer neighborhoods a practical way to share space a",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4727,
+    "model_score": 0.4134,
+    "style_score": 0.5617,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "A repair cafe is a local event where volunteers help neighbors fix com",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4194,
+    "model_score": 0.4302,
+    "style_score": 0.4033,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Cities often debate whether a new bicycle lane is worth the space it t",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4893,
+    "model_score": 0.5211,
+    "style_score": 0.4417,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "Public libraries have adapted to changes in how people find informatio",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.3665,
+    "model_score": 0.3273,
+    "style_score": 0.4254,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "An astronomy club can make the night sky approachable for beginners by",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.4232,
+    "model_score": 0.4309,
+    "style_score": 0.4117,
+    "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+    "sent": "School lunch programs have to balance nutrition, cost, food safety, an",
+    "error": null,
+    "message": null
+  },
+  {
+    "status": 200,
+    "guess": "ai",
+    "confidence": 0.995,
+    "model_score": 0.9916,
+    "style_score": 1.0,
+    "label": "Our checks found strong signs of AI-generated writing. This automated label may be wrong, and the creator can appeal it.",
+    "sent": "The system works well. The system works well. The system works well. T",
+    "error": null,
+    "message": null
+  },
+  {
+    "sent": "score_to_label grid: 0.00, 0.01, ..., 1.00",
+    "scores_checked": 101,
+    "labels_seen": [
+      "ai",
+      "human",
+      "unsure"
+    ],
+    "invalid_scores": []
+  }
+]
+```
+
+**Criterion 4 — appeals**
+
+```json
+[
+  {
+    "sent": "Community gardens offer neighborhoods a practical way to share space a",
+    "submit_status": 200,
+    "content_id": "2744d01d-c286-478c-9158-13e49167fd7b",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "2744d01d-c286-478c-9158-13e49167fd7b",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "A repair cafe is a local event where volunteers help neighbors fix com",
+    "submit_status": 200,
+    "content_id": "b0ea8e12-f687-4f38-9bda-5753f7139c08",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "b0ea8e12-f687-4f38-9bda-5753f7139c08",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "Cities often debate whether a new bicycle lane is worth the space it t",
+    "submit_status": 200,
+    "content_id": "77c6a867-bbbc-4927-ace4-ec35e3cfc78c",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "77c6a867-bbbc-4927-ace4-ec35e3cfc78c",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "Public libraries have adapted to changes in how people find informatio",
+    "submit_status": 200,
+    "content_id": "9bb8a164-0394-46fb-a533-68f411bbb79e",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "9bb8a164-0394-46fb-a533-68f411bbb79e",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "An astronomy club can make the night sky approachable for beginners by",
+    "submit_status": 200,
+    "content_id": "503c3392-93c6-4fd0-a3e5-70dc52e6c30f",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "503c3392-93c6-4fd0-a3e5-70dc52e6c30f",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "School lunch programs have to balance nutrition, cost, food safety, an",
+    "submit_status": 200,
+    "content_id": "9af5ff9d-7170-41e2-b3f0-5802eaa21bb0",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "9af5ff9d-7170-41e2-b3f0-5802eaa21bb0",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "Volunteer groups often begin with enthusiasm and then struggle to sust",
+    "submit_status": 200,
+    "content_id": "3628b9dd-3209-495a-b2b5-a076d58e298d",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "3628b9dd-3209-495a-b2b5-a076d58e298d",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "Keeping useful notes during a meeting is a different task from recordi",
+    "submit_status": 200,
+    "content_id": "cf356cb5-18be-402b-9ed2-d4b024a09687",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "cf356cb5-18be-402b-9ed2-d4b024a09687",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "Street trees can cool a neighborhood and make walking more pleasant, b",
+    "submit_status": 200,
+    "content_id": "f66cd7b8-21e4-432e-8949-cfab5f5e627c",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "f66cd7b8-21e4-432e-8949-cfab5f5e627c",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "A small museum can make a familiar object interesting by explaining th",
+    "submit_status": 200,
+    "content_id": "19437c37-e337-4905-8259-20a4b3f75a05",
+    "appeal_status": 200,
+    "appeal_response": {
+      "content_id": "19437c37-e337-4905-8259-20a4b3f75a05",
+      "message": "Your appeal was recorded for human review.",
+      "status": "under_review"
+    },
+    "original_preserved": true,
+    "reasoning_recorded": true
+  },
+  {
+    "sent": "unknown content_id",
+    "content_id": "7898d619-be1e-42d2-88c6-b8bc2ed7532c",
+    "appeal_status": 404,
+    "appeal_response": {
+      "error": "not_found",
+      "message": "No submission has that content_id."
+    },
+    "appeal_event_written": false
+  }
+]
+```
+
+**Criterion 5 — malformed input**
+
+```json
+[
+  {
+    "sent": "[]",
+    "status": 400,
+    "error": "invalid_json",
+    "message": "Send a JSON object.",
+    "new_decisions": 0
+  },
+  {
+    "sent": "{\"creator_id\": \"eval_missing_text\"}",
+    "status": 400,
+    "error": "invalid_text",
+    "message": "text must be a nonblank string.",
+    "new_decisions": 0
+  },
+  {
+    "sent": "   ",
+    "status": 400,
+    "error": "invalid_text",
+    "message": "text must be a nonblank string.",
+    "new_decisions": 0
+  },
+  {
+    "sent": "{\"text\": 42, \"creator_id\": \"eval_nonstring_text\"}",
+    "status": 400,
+    "error": "invalid_text",
+    "message": "text must be a nonblank string.",
+    "new_decisions": 0
+  },
+  {
+    "sent": "{\"text\": \"This body has no creator ID.\"}",
+    "status": 400,
+    "error": "invalid_creator_id",
+    "message": "creator_id must be a nonblank string of at most 128 characters.",
+    "new_decisions": 0
+  },
+  {
+    "sent": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "status": 413,
+    "error": "text_too_long",
+    "message": "text may be at most 10,000 characters.",
+    "new_decisions": 0
+  }
+]
+```
 
 ---
 
 ## What's Still Broken
 
-<!-- For each attack still getting through and each criterion still missed:
-     what you'd do, and why you stopped. -->
+Fourteen staff attacks still meet their adversarial objective. Each next step
+below would require another service change or a separate provenance source, so
+I stopped after the single measured threshold change required for this unit.
+The before-run diagnoses above identify the stage and mechanism behind these
+remaining failures.
 
+| Still broken | Next step | Why I stopped here |
+|---|---|---|
+| EV01 | Test typo normalization or perturbation-aware model calibration. | A model-signal change needs a held-out typo set. |
+| EV02 | Make sentence-spread style measurement less sensitive to manual sentence breaks. | A style-signal change would be a second improvement. |
+| EV03 | Evaluate quote segmentation so pasted quotations do not dominate style. | Segmenting quotes needs tests for genuine quotation use. |
+| EV04 | Calibrate model predictability on rare but generated vocabulary. | It changes signal one and needs representative samples. |
+| EV05 | Use consented drafting history or source provenance to check a heavily edited passage. | The final text alone does not reveal its drafting history. |
+| EV06 | Robustify the style statistic against one extreme long/short sentence pair. | This is another signal-two change requiring held-out tests. |
+| EV07 | Measure whether punctuation normalization resists padding without harming expressive writing. | A new style rule could penalize real writers. |
+| EV08 | Design an explicit short-text abstention or different short-text signal. | Short-text policy affects labels and needs separate calibration. |
+| EV09 | Try span-level scores before aggregating a human opening with AI-origin text. | This is a new signal path, beyond one change. |
+| PI02 | Test role-marker wrappers against the ordinary scoring path; consider treating them as untrusted text structure. | The observed human label came from text shape, not obedience to the fake SYSTEM instruction; a wrapper rule needs evidence. |
+| MF03 | Reject control bytes while allowing ordinary line breaks and tabs. | Route validation would be a second service change. |
+| MF04 | Require substantive text before scoring punctuation-only input. | A word rule needs multilingual and accessibility tests. |
+| MF05 | Set a documented maximum uninterrupted token length or reject wordless extremes. | Legitimate URLs, code, and identifiers could be affected. |
+| MF06 | Reject emoji-only scoring as unsupported while preserving non-Latin writing. | A language-aware validation policy needs more examples. |
 
+Criterion 2 remains **MISSED** in all three after trials: AI and human medians
+are 0.4213 and 0.4942. I would collect representative, provenance-verified
+samples and recalibrate or replace the model signal before selecting new
+weights; I stopped because a threshold cannot reverse the score ordering, and
+changing that signal would be a second improvement.
 
-**The trade I'd make if this ran for real:**
+Criterion 3 remains **MISSED** in all three after trials: the frozen 12
+submissions produce only `ai` and `unsure`, though the 101-score mapping is
+complete. I would evaluate the disagreement shrink and human threshold on a
+larger human set, then retest whether actual human writing safely reaches
+`human`; I stopped because that is another threshold or combining-rule change
+and could create false human claims.
 
-<!-- Two sentences. Fewer wrong accusations means more AI text getting through.
-     Say which way you'd go and WHO PAYS FOR IT. -->
-
-
+**The trade I would make if this ran for real:** I would retain the wider unsure
+band to reduce unsupported AI accusations against writers, accepting that
+generated text in the 0.75–0.80 band may avoid an AI label. Writers bear fewer
+false accusations, while human reviewers and readers bear more manual checking
+and missed generated text.
 
 <!-- ═════════════════════════════════════════════════════════════════════
 
