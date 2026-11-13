@@ -47,7 +47,7 @@ def start_submission_timer():
 
 @app.after_request
 def record_submission_run(response):
-    if request.path == "/submit" and request.method == "POST" and response.status_code == 200:
+    if request.path == "/submit" and request.method == "POST":
         elapsed_ms = (time.perf_counter_ns() - g.submission_start_ns) / 1_000_000
         runlog.log_submission(
             payload=request.get_json(silent=True),
