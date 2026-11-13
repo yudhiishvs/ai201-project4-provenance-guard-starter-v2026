@@ -31,8 +31,8 @@ ROOT = Path(__file__).parent
 # first run; authorship is the student's attestation, not a detector finding.
 HUMAN_TEXTS = [path.read_text(encoding="utf-8").strip()
                for path in sorted((ROOT / "samples/evaluation_samples").glob("personal_*.txt"))]
-# Codex generated these ten samples before the first criterion run. They are
-# separate from the staff attack set.
+# A text-generation assistant produced these ten samples before the first
+# criterion run. They are separate from the staff attack set.
 AI_TEXTS = [row["text"] for row in json.loads(
     (ROOT / "samples/ai_generated.json").read_text(encoding="utf-8"))]
 
