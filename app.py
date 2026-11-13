@@ -24,17 +24,40 @@ Routes:
     GET  /health      is the service up, and is the model loaded
 """
 
+import time
 import uuid
 
-from flask import Flask, jsonify, request
+from flask import Flask, g, jsonify, request
 
 import audit
 import config
 import detector
+import runlog
 import scoring
 import stylometry
 
 app = Flask(__name__)
+
+
+@app.before_request
+def start_submission_timer():
+    if request.path == "/submit" and request.method == "POST":
+        g.submission_start_ns = time.perf_counter_ns()
+
+
+@app.after_request
+def record_submission_run(response):
+    if request.path == "/submit" and request.method == "POST" and response.status_code == 200:
+        elapsed_ms = (time.perf_counter_ns() - g.submission_start_ns) / 1_000_000
+        runlog.log_submission(
+            payload=request.get_json(silent=True),
+            response_body=response.get_json(silent=True),
+            status_code=response.status_code,
+            duration_ms=elapsed_ms,
+            body_bytes=request.content_length,
+            content_type=request.content_type,
+        )
+    return response
 
 
 # ── Rate limiting — UNIT 8 ────────────────────────────────────────────────────
