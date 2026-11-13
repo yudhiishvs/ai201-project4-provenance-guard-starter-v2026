@@ -224,25 +224,37 @@ $ curl -sS 'http://127.0.0.1:5000/log?limit=2'
 
 ## Rate Limiting
 
-**My limits:** ___ per minute, ___ per day
+**My limits:** 10 submissions per minute and 200 per day.
 
-**Why those numbers and not others:**
+**Why those numbers and not others:** A writer can revise and submit several
+times in a minute, while the eleventh attempt in that minute is more likely to
+be an automated burst. A 200/day cap leaves room for a long writing session but
+stops one identity from sending a thousand variants in a day. The limiter uses
+in-memory counters, so restarting this local demo resets them.
 <!-- Think about two people: a real writer submitting their own work a few
      times an hour, and a script sending a thousand variations to map your
      thresholds. Your numbers have to be liveable for the first and hostile to
      the second. -->
 
-**What a caller counts as:** <!-- per address, or per creator_id? They fail
-differently — one script can look like a thousand callers, and one household
-can look like one. -->
+**What a caller counts as:** A nonblank `creator_id` is the key; requests
+without one fall back to the caller's address. This lets writers sharing an
+address submit independently, but a script can evade the limit by inventing
+creator IDs. A real service would bind IDs to authenticated accounts.
 
 **The run of status codes when I pushed past it:**
 
 <!-- python run_attacks.py --flood 15 -->
 
 ```
-
+200 200 200 200 200 200 200 200 200 200 429 429 429 429 429
 ```
+
+`run_attacks.py --flood 15 --creator milestone1-flood` produced this on
+November 13, 2026. `GET /health` returned `"rate_limiting":true`, and
+`GET /log` showed rejection events with `reason:"rate_limited"`. A decided
+entry includes timestamp, content ID, creator ID, guess, both signal scores,
+combined score, reader label, and status; a 429 has no decision scores because
+the route did not score it.
 
 ---
 

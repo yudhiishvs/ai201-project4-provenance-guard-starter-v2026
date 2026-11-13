@@ -154,7 +154,7 @@ def health():
 # ── Submission and appeals ───────────────────────────────────────────────────
 
 @app.post("/submit")
-# @limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
+@limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
 def submit():
     """Validate, score, label, and audit a submitted piece of writing."""
     payload = request.get_json(silent=True)
