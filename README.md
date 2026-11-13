@@ -198,43 +198,47 @@ $ curl -sS 'http://127.0.0.1:5000/log?limit=2'
 
 ## How I Used AI
 
-**Moment 1**
+I used an AI assistant throughout this project to plan the service and its
+criteria, implement and test the code, run the evaluations, interpret the
+results, and draft the documentation. I supplied the assignment brief, the
+staff attack set, and the personal evaluation samples.
 
-- **What I asked for:** I attached the Provenance Guard brief and said,
-  “Do this.”
-- **What came back:** The response outlined the submission flow, both signals'
-  blind spots, and the appeal path.
-- **What I changed:** The starter's blank `criteria.md` became five checkable
-  targets, and `planning.md` captured the submission path and the false-positive
-  appeal path. Both were committed before model results.
+**Moment 1 — planning**
 
-**Moment 2**
+- **What I asked for:** I gave the AI assistant the Provenance Guard brief and
+  asked it to help turn the assignment into a testable plan.
+- **What came back:** It proposed the submission flow, two signals and their
+  blind spots, an appeal path, and measurable criteria.
+- **What I kept:** `criteria.md` records five checkable targets, while
+  `planning.md` records the submission and false-positive appeal paths. Both
+  were committed before any model results were examined.
 
-- **What I asked for:** “Just do the assignment yourself in its entirety.”
-- **What came back:** The assistant implemented both signals, three labels,
-  the two routes, and tests. Its first four calibration cases all received `unsure`;
-  a repetitive AI example and a Carroll poem reached the outer labels.
-- **What I changed:** The service now records both signal scores and every
-  appeal in an append-only log. I kept the conservative thresholds and added
-  the measured disagreement case and the real curl transcript above, rather
-  than claiming the detector was accurate.
+**Moment 2 — implementation and calibration**
 
-**Moment 3 — Unit 8**
+- **What I asked for:** I asked the assistant to complete the build, including
+  the detector, service routes, tests, and explanatory write-up.
+- **What came back:** It implemented both signals, three reader-facing labels,
+  submission and appeal routes, and tests. The first four calibration cases
+  were all `unsure`; later edge cases reached the `human` and `ai` labels.
+- **What I kept:** The audit log records both signals and every appeal. The
+  README includes the measured disagreement case and real request and response
+  text, and describes the detector as an uncertain signal rather than proof of
+  authorship.
 
-- **What I asked for:** I asked a coding assistant to complete the testing
-  assignment in the existing repo locally and supplied the staff attack zip
-  and a zip of evaluation samples.
-- **What came back:** The assistant enabled the prepared limiter, froze ten
-  generated AI samples and the supplied personal samples, ran the full attack
-  set and fifteen criterion trials before and after one threshold change, and
-  wrote runner tests, reports, and this analysis.
-- **What I kept in the submission:** The original five targets stayed
-  unchanged. The assistant inspected the attack text only after the initial
-  full run.
-  The personal samples are user-supplied, not independently verified. This
-  report keeps the two missed criteria and fourteen remaining attacks visible,
-  and the detector improvement is confined to the AI boundary from 0.75 to
-  0.80.
+**Moment 3 — testing and reporting**
+
+- **What I asked for:** I asked the assistant to complete Unit 8 locally using
+  the supplied staff attack set and personal evaluation samples.
+- **What came back:** It enabled rate limiting, prepared frozen AI-generated
+  samples, ran all 56 staff attacks and all five criteria in three trials
+  before and after one threshold change, and drafted the verdicts and failure
+  analysis from the recorded outputs.
+- **What I kept:** The five original criteria stayed unchanged, and the staff
+  attack text was inspected only after the first full run. The report retains
+  two missed criteria and fourteen attacks that still broke the service. The
+  sole detector improvement was the AI threshold change from 0.75 to 0.80.
+  The personal samples were user-supplied; their authorship was not
+  independently verified.
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
