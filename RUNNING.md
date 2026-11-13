@@ -306,3 +306,42 @@ is evidence, and the entries you paste into your README are what unit 8 grades.
 
 **Do not delete and recreate this repository.** You submit the same URL both
 units.
+
+---
+
+## Capstone: local run with a persistent record
+
+This is Path B. The tested machine is macOS arm64 with Python **3.13.13**.
+The direct and transitive dependencies used for the capstone are pinned to
+exact versions in [`requirements-capstone.lock`](requirements-capstone.lock).
+The existing [`requirements.txt`](requirements.txt) permits version ranges;
+use the lock file to reproduce this measured run.
+
+From a clean checkout, complete setup once:
+
+```bash
+python3.13 -m venv .venv
+./.venv/bin/python -m pip install -r requirements-capstone.lock
+./.venv/bin/python detector.py
+```
+
+The last command downloads the local `gpt2` model if it is missing, then
+checks that it can score a sample. The model cache used for this run is
+`~/.cache/huggingface/hub/models--gpt2`, measured at **525 MiB on disk** with
+`du -sh`. No API key is needed. The first submission in a new server process
+also loads the model into memory and takes longer than later submissions.
+
+From the repository root, **this one command starts the capstone service**:
+
+```bash
+./.venv/bin/gunicorn app:app --bind 127.0.0.1:5000 --workers 1 --threads 1
+```
+
+Leave it running and, in another terminal, use the existing `/ping` and
+`/submit` requests above. Each `POST /submit`, including a rejected one,
+appends one JSON object to `logs/runs.jsonl`. Its `input` summarizes the
+request by creator ID, character count, byte count, content type, and SHA-256
+fingerprint; it does not keep submitted prose. Its `output` includes HTTP
+status, decision identifiers when present, and an error code for a rejection.
+`duration_ms` measures elapsed request time with a monotonic clock. The
+earlier `logs/audit.jsonl` remains the decision and appeal audit trail.
