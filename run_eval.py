@@ -151,6 +151,23 @@ def run_appeal_trial(scenario, post, get):
     return results
 
 
+def run_rejection_trial(scenario, post, get):
+    """Check the returned JSON and any decisions appended by each bad input."""
+    results = []
+    for body in scenario["bodies"]:
+        before = len(get("/log")["entries"])
+        status, response = post("/submit", body)
+        appended = get("/log")["entries"][before:]
+        results.append({
+            "sent": describe(body),
+            "status": status,
+            "error": response.get("error"),
+            "message": response.get("message"),
+            "new_decisions": sum(entry.get("status") == "decided" for entry in appended),
+        })
+    return results
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -212,6 +229,12 @@ def main():
                 except Exception as exc:  # noqa: BLE001
                     results.append({"status": None, "error": f"{type(exc).__name__}: {exc}",
                                     "sent": "appeal trial"})
+            elif scenario.get("kind") == "rejection":
+                try:
+                    results = run_rejection_trial(scenario, post, get)
+                except Exception as exc:  # noqa: BLE001
+                    results.append({"status": None, "error": f"{type(exc).__name__}: {exc}",
+                                    "sent": "rejection trial"})
             else:
                 for i, body in enumerate(bodies_for(scenario), 1):
                     preview = describe(body)

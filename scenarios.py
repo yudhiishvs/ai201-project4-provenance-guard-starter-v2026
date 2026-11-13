@@ -22,51 +22,67 @@ A scenario carries **either** of these:
 """
 
 import json
+from pathlib import Path
 
+
+ROOT = Path(__file__).parent
+# The supplied personal pieces are frozen in filename order. The first five
+# are deliberately plain. They were supplied for this criterion before its
+# first run; authorship is the student's attestation, not a detector finding.
+HUMAN_TEXTS = [path.read_text(encoding="utf-8").strip()
+               for path in sorted((ROOT / "samples/evaluation_samples").glob("personal_*.txt"))]
+# Codex generated these ten samples before the first criterion run. They are
+# separate from the staff attack set.
+AI_TEXTS = [row["text"] for row in json.loads(
+    (ROOT / "samples/ai_generated.json").read_text(encoding="utf-8"))]
+
+REPETITIVE_AI = "The system works well. " * 8
+CARROLL_HUMAN = (
+    "’Twas brillig, and the slithy toves did gyre and gimble in the wabe; "
+    "all mimsy were the borogoves, and the mome raths outgrabe."
+)
 
 SCENARIOS = [
     {
-        "name": "my own writing",
+        "name": "human writing false accusations",
         "criterion": 1,
-        # ⚠️ PUT YOUR OWN WRITING HERE. Not AI text, not a sample from the web —
-        # things you actually wrote. This is the criterion that matters most and
-        # it's meaningless with someone else's prose.
-        "texts": [
-            "REPLACE ME with a paragraph you wrote yourself.",
-            "REPLACE ME with another one. Ten pieces is the usual number.",
-        ],
+        "texts": HUMAN_TEXTS,
     },
     {
-        "name": "label coverage",
+        "name": "known AI versus human score medians",
         "criterion": 2,
-        # Inputs spread across your score range, so you can check all three
-        # labels are actually reachable.
-        "texts": [
-            "REPLACE ME with something you're confident is AI-generated.",
-            "REPLACE ME with something you're confident is human-written.",
-            "REPLACE ME with something genuinely borderline.",
+        # The first ten are AI, and the last ten are user-supplied human pieces.
+        "texts": AI_TEXTS + HUMAN_TEXTS[10:20],
+    },
+    {
+        "name": "three labels and hundredth grid",
+        "criterion": 3,
+        # Five known human and seven known AI texts, including the two edge
+        # examples documented in Unit 7 before these measurements.
+        "texts": [HUMAN_TEXTS[i] for i in (0, 5, 10, 15)] +
+                 [CARROLL_HUMAN] + AI_TEXTS[:6] + [REPETITIVE_AI],
+        "score_grid": True,
+    },
+    {
+        "name": "ten valid appeals and one unknown id",
+        "criterion": 4,
+        "kind": "appeal",
+        "texts": AI_TEXTS,
+        "reasoning": "I wrote this passage and request a human review.",
+    },
+    {
+        "name": "six malformed or oversized submissions",
+        "criterion": 5,
+        "kind": "rejection",
+        "bodies": [
+            [],
+            {"creator_id": "eval_missing_text"},
+            {"text": "   ", "creator_id": "eval_blank_text"},
+            {"text": 42, "creator_id": "eval_nonstring_text"},
+            {"text": "This body has no creator ID."},
+            {"text": "x" * 10001, "creator_id": "eval_oversized_text"},
         ],
     },
-    # A bad-input criterion looks like this. Uncomment and adjust if that's one
-    # of your five — these are raw request bodies, sent exactly as written.
-    #
-    # {
-    #     "name": "bad input",
-    #     "criterion": 3,
-    #     "bodies": [
-    #         {"text": "", "creator_id": "eval_bad_empty"},
-    #         {"creator_id": "eval_bad_missing"},          # no text field at all
-    #         {"text": "word " * 50000, "creator_id": "eval_bad_huge"},
-    #         {"text": None, "creator_id": "eval_bad_null"},
-    #     ],
-    # },
-
-    # TODO: add what your remaining criteria need.
-    #
-    # A criterion about the appeal path can't be tested by sending text alone;
-    # it needs a submission first and then an appeal against the content_id
-    # that came back. You'll need to test that one by hand, or extend this file
-    # and run_eval.py to do it. Saying which you did is part of the write-up.
 ]
 
 
