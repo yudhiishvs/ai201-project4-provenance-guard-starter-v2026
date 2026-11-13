@@ -16,11 +16,13 @@ A scenario carries **either** of these:
     "texts"   a list of strings. Each is sent as {"text": ..., "creator_id": ...}
               with a creator_id made up for you. Use this for most criteria.
 
-    "bodies"  a list of whole request bodies, sent exactly as written. Use this
-              when the malformed request IS the point — empty text, no `text`
-              field at all, something enormous. A bad-input criterion needs it,
-              because you cannot express "the field is missing" as a string.
+    "bodies"  a list of JSON request bodies, sent exactly as written. Use this
+              when the malformed request IS the point — an array instead of an
+              object, empty text, a missing field, or something enormous.
 """
+
+import json
+
 
 SCENARIOS = [
     {
@@ -72,9 +74,8 @@ def validate() -> list[str]:
     """
     Complain about anything malformed, before a long run rather than during.
 
-    A "bodies" scenario is deliberately exempt from the empty check — an empty
-    string is the whole point of a bad-input case, and refusing to run one
-    would make that criterion untestable.
+    A "bodies" scenario is deliberately exempt from the text check — an empty
+    string or a non-object JSON value can be the whole point of a bad-input case.
     """
     problems = []
     for i, scenario in enumerate(SCENARIOS, 1):
@@ -93,10 +94,11 @@ def validate() -> list[str]:
 
         if bodies:
             for j, body in enumerate(bodies, 1):
-                if not isinstance(body, dict):
+                try:
+                    json.dumps(body)
+                except (TypeError, ValueError):
                     problems.append(
-                        f"scenario {i}, body {j} is not a dict — bodies are whole "
-                        f"request bodies, like {{'text': '', 'creator_id': 'x'}}"
+                        f"scenario {i}, body {j} is not JSON-serializable"
                     )
             continue
 
