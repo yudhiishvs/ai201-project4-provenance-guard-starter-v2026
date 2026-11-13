@@ -326,7 +326,9 @@ python3.13 -m venv .venv
 ```
 
 The last command downloads the local `gpt2` model if it is missing, then
-checks that it can score a sample. The model cache used for this run is
+checks that it can score a sample. On a machine with the model already cached
+but no network access, use `HF_HUB_OFFLINE=1 ./.venv/bin/python detector.py`
+for that check. The model cache used for this run is
 `~/.cache/huggingface/hub/models--gpt2`, measured at **525 MiB on disk** with
 `du -sh`. No API key is needed. The first submission in a new server process
 also loads the model into memory and takes longer than later submissions.
@@ -334,7 +336,7 @@ also loads the model into memory and takes longer than later submissions.
 From the repository root, **this one command starts the capstone service**:
 
 ```bash
-./.venv/bin/gunicorn app:app --bind 127.0.0.1:5000 --workers 1 --threads 1
+HF_HUB_OFFLINE=1 ./.venv/bin/gunicorn app:app --bind 127.0.0.1:5000 --workers 1 --threads 1
 ```
 
 Leave it running and, in another terminal, use the existing `/ping` and

@@ -2352,3 +2352,11 @@ The extension is the run path, submission instrumentation, and measurements
 from actual requests. I am leaving the detector model, score thresholds, and
 appeal workflow out of scope so the capstone measures the operational layer
 without changing the earlier system's judgments.
+
+**Running It**
+
+This uses Path B: a local Gunicorn service started by the single command in
+[RUNNING.md](RUNNING.md). I verified the pinned setup in a fresh checkout and
+received a real `/ping` response from the running server. The local `gpt2`
+model stays on the machine; submissions will be recorded in
+`logs/runs.jsonl`.
