@@ -1,0 +1,2067 @@
+{
+  "phase": "after",
+  "revision": "2656533599914b823f2ee47d80e899c2da99c1ab",
+  "environment": "Darwin arm64, Python 3.13.13",
+  "start_command": "HF_HUB_OFFLINE=1 ./.venv/bin/gunicorn app:app --bind 127.0.0.1:5000 --workers 1 --threads 1",
+  "verdicts": [
+    "MET",
+    "MET",
+    "MET",
+    "MET",
+    "MET"
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "startup_response": {
+        "ok": true,
+        "service": "provenance-guard",
+        "you_sent": "trial startup"
+      },
+      "worker_cpu": {
+        "before_warm_batch": {
+          "pid": 96730,
+          "readout": "0:01.86",
+          "cpu_seconds": 1.86
+        },
+        "after_warm_batch": {
+          "pid": 96730,
+          "readout": "0:02.10",
+          "cpu_seconds": 2.1
+        }
+      },
+      "counts": [
+        3,
+        10,
+        10,
+        5,
+        10
+      ],
+      "execution": [
+        {
+          "case": "capstone-start-1-01",
+          "body_bytes": 686,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5933,
+            "content_id": "a543b443-a1ff-4378-8ff3-790518eebaed",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8381,
+            "status": "decided",
+            "style_score": 0.4595
+          },
+          "client_ms": 2799.736,
+          "log_count": 1,
+          "log_line": 1,
+          "passed": true
+        },
+        {
+          "case": "capstone-start-1-02",
+          "body_bytes": 659,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5524,
+            "content_id": "2396e1cb-f96e-4580-828c-ead25352377a",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.7832,
+            "status": "decided",
+            "style_score": 0.3374
+          },
+          "client_ms": 51.491,
+          "log_count": 1,
+          "log_line": 2,
+          "passed": true
+        },
+        {
+          "case": "capstone-start-1-03",
+          "body_bytes": 694,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.6003,
+            "content_id": "8421e0b7-a589-4a0a-ad58-be69305bf276",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8429,
+            "status": "decided",
+            "style_score": 0.487
+          },
+          "client_ms": 55.928,
+          "log_count": 1,
+          "log_line": 3,
+          "passed": true
+        }
+      ],
+      "logging": [
+        {
+          "case": "capstone-log-1-01",
+          "body_bytes": 122,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3894,
+            "content_id": "64fb203a-9ef8-4dcf-aa14-f339ae1b763f",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1312,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 18.048,
+          "log_count": 1,
+          "log_line": 4,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-02",
+          "body_bytes": 116,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3774,
+            "content_id": "86a2d05a-c5b4-4575-9e27-acd6da88837e",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.0912,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 16.646,
+          "log_count": 1,
+          "log_line": 5,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-03",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5596,
+            "content_id": "8c186a28-83ec-4297-919f-6b7a89b1b094",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5993,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.953,
+          "log_count": 1,
+          "log_line": 6,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-04",
+          "body_bytes": 119,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4293,
+            "content_id": "099c8e1d-c984-45fa-97fa-446c9dcc57de",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3822,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.862,
+          "log_count": 1,
+          "log_line": 7,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-05",
+          "body_bytes": 116,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3629,
+            "content_id": "7e30acb8-422e-4998-bd26-1cb8c386d111",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.2715,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 16.47,
+          "log_count": 1,
+          "log_line": 8,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-06",
+          "body_bytes": 120,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4156,
+            "content_id": "531e5b2d-e912-4467-b7ba-fe5f65b09915",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3593,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 21.222,
+          "log_count": 1,
+          "log_line": 9,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-07",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3112,
+            "content_id": "2de07403-ccf8-429f-90c9-4a15232855cd",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1854,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 16.29,
+          "log_count": 1,
+          "log_line": 10,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-08",
+          "body_bytes": 117,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3906,
+            "content_id": "364bb478-3653-4f7e-9af1-95396a708bd0",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1354,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 16.485,
+          "log_count": 1,
+          "log_line": 11,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-09",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3875,
+            "content_id": "802f0018-f178-4598-a2ab-f7ddf908c76b",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3125,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 23.3,
+          "log_count": 1,
+          "log_line": 12,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-1-10",
+          "body_bytes": 119,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3578,
+            "content_id": "ae1285c3-645b-40fe-b71e-3570dae4b9a9",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.263,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 26.491,
+          "log_count": 1,
+          "log_line": 13,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        }
+      ],
+      "failures": [
+        {
+          "case": "empty-body",
+          "body_bytes": 0,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_json",
+            "message": "Send a JSON object."
+          },
+          "client_ms": 1.604,
+          "log_count": 1,
+          "log_line": 14,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 611,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_json"
+          },
+          "passed": true
+        },
+        {
+          "case": "malformed-json",
+          "body_bytes": 1,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_json",
+            "message": "Send a JSON object."
+          },
+          "client_ms": 0.808,
+          "log_count": 1,
+          "log_line": 15,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 612,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_json"
+          },
+          "passed": true
+        },
+        {
+          "case": "blank-text",
+          "body_bytes": 45,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_text",
+            "message": "text must be a nonblank string."
+          },
+          "client_ms": 0.72,
+          "log_count": 1,
+          "log_line": 16,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 613,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_text"
+          },
+          "passed": true
+        },
+        {
+          "case": "missing-creator",
+          "body_bytes": 50,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_creator_id",
+            "message": "creator_id must be a nonblank string of at most 128 characters."
+          },
+          "client_ms": 0.625,
+          "log_count": 1,
+          "log_line": 17,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 614,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_creator_id"
+          },
+          "passed": true
+        },
+        {
+          "case": "oversized-text",
+          "body_bytes": 10042,
+          "http_status": 413,
+          "response": {
+            "error": "text_too_long",
+            "message": "text may be at most 10,000 characters."
+          },
+          "client_ms": 0.675,
+          "log_count": 1,
+          "log_line": 18,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 615,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 413,
+            "error": "text_too_long"
+          },
+          "passed": true
+        }
+      ],
+      "preservation": [
+        {
+          "case": "capstone-prior-1-01",
+          "body_bytes": 686,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5933,
+            "content_id": "bc68a0ce-f0e1-4f67-8890-f8196f2a85d8",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8381,
+            "status": "decided",
+            "style_score": 0.4595
+          },
+          "client_ms": 51.132,
+          "log_count": 1,
+          "log_line": 19,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5933,
+            "model_score": 0.8381,
+            "style_score": 0.4595
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-02",
+          "body_bytes": 808,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5375,
+            "content_id": "057fa467-787a-4c6d-9477-6361f8474fc1",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.6399,
+            "status": "decided",
+            "style_score": 0.3838
+          },
+          "client_ms": 50.51,
+          "log_count": 1,
+          "log_line": 20,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5375,
+            "model_score": 0.6399,
+            "style_score": 0.3838
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-03",
+          "body_bytes": 766,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5039,
+            "content_id": "d081f4ab-d4bc-4516-abd9-3c7a44c51dd8",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5209,
+            "status": "decided",
+            "style_score": 0.4784
+          },
+          "client_ms": 49.58,
+          "log_count": 1,
+          "log_line": 21,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5039,
+            "model_score": 0.5209,
+            "style_score": 0.4784
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-04",
+          "body_bytes": 832,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4722,
+            "content_id": "531e89cd-60ca-4683-b210-1e52dd703c94",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5277,
+            "status": "decided",
+            "style_score": 0.389
+          },
+          "client_ms": 49.655,
+          "log_count": 1,
+          "log_line": 22,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4722,
+            "model_score": 0.5277,
+            "style_score": 0.389
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-05",
+          "body_bytes": 175,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3724,
+            "content_id": "7e5456f3-c53c-4b7d-a3c4-0fa36d592fbf",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.0457,
+            "status": "decided",
+            "style_score": 0.5435
+          },
+          "client_ms": 28.815,
+          "log_count": 1,
+          "log_line": 23,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.3724,
+            "model_score": 0.0457,
+            "style_score": 0.5435
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-06",
+          "body_bytes": 724,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5577,
+            "content_id": "01ba11d9-8a82-447e-872f-08b906a2e81c",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.6305,
+            "status": "decided",
+            "style_score": 0.4484
+          },
+          "client_ms": 45.117,
+          "log_count": 1,
+          "log_line": 24,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5577,
+            "model_score": 0.6305,
+            "style_score": 0.4484
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-07",
+          "body_bytes": 656,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4727,
+            "content_id": "de988615-7e7f-4a6c-bab1-fd77407ad8d0",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.4134,
+            "status": "decided",
+            "style_score": 0.5617
+          },
+          "client_ms": 44.051,
+          "log_count": 1,
+          "log_line": 25,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4727,
+            "model_score": 0.4134,
+            "style_score": 0.5617
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-08",
+          "body_bytes": 705,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4194,
+            "content_id": "78982ee6-1a70-4241-906c-2aa678a3ff42",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.4302,
+            "status": "decided",
+            "style_score": 0.4033
+          },
+          "client_ms": 45.138,
+          "log_count": 1,
+          "log_line": 26,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4194,
+            "model_score": 0.4302,
+            "style_score": 0.4033
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-09",
+          "body_bytes": 683,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4893,
+            "content_id": "df8b51ac-8992-479e-a516-7a29e5934ba1",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5211,
+            "status": "decided",
+            "style_score": 0.4417
+          },
+          "client_ms": 44.83,
+          "log_count": 1,
+          "log_line": 27,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4893,
+            "model_score": 0.5211,
+            "style_score": 0.4417
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-1-10",
+          "body_bytes": 725,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3665,
+            "content_id": "d07499ff-63ef-4164-95ee-1ac39b1efab5",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3273,
+            "status": "decided",
+            "style_score": 0.4254
+          },
+          "client_ms": 44.453,
+          "log_count": 1,
+          "log_line": 28,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.3665,
+            "model_score": 0.3273,
+            "style_score": 0.4254
+          },
+          "passed": true
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "startup_response": {
+        "ok": true,
+        "service": "provenance-guard",
+        "you_sent": "trial startup"
+      },
+      "worker_cpu": {
+        "before_warm_batch": {
+          "pid": 96754,
+          "readout": "0:01.62",
+          "cpu_seconds": 1.62
+        },
+        "after_warm_batch": {
+          "pid": 96754,
+          "readout": "0:01.85",
+          "cpu_seconds": 1.85
+        }
+      },
+      "counts": [
+        3,
+        10,
+        10,
+        5,
+        10
+      ],
+      "execution": [
+        {
+          "case": "capstone-start-2-01",
+          "body_bytes": 686,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5933,
+            "content_id": "b55dbdb8-0978-44f4-bde9-b2776453b819",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8381,
+            "status": "decided",
+            "style_score": 0.4595
+          },
+          "client_ms": 1333.701,
+          "log_count": 1,
+          "log_line": 29,
+          "passed": true
+        },
+        {
+          "case": "capstone-start-2-02",
+          "body_bytes": 659,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5524,
+            "content_id": "fec9f4bc-06a6-46f0-b243-eab34fbdffc2",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.7832,
+            "status": "decided",
+            "style_score": 0.3374
+          },
+          "client_ms": 52.072,
+          "log_count": 1,
+          "log_line": 30,
+          "passed": true
+        },
+        {
+          "case": "capstone-start-2-03",
+          "body_bytes": 694,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.6003,
+            "content_id": "3621d0f0-2cad-45e3-99fc-ba448653f825",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8429,
+            "status": "decided",
+            "style_score": 0.487
+          },
+          "client_ms": 55.094,
+          "log_count": 1,
+          "log_line": 31,
+          "passed": true
+        }
+      ],
+      "logging": [
+        {
+          "case": "capstone-log-2-01",
+          "body_bytes": 122,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3894,
+            "content_id": "8c802f81-ff3b-4ffc-bd67-8c52413b0cb2",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1312,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 18.266,
+          "log_count": 1,
+          "log_line": 32,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-02",
+          "body_bytes": 116,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3774,
+            "content_id": "acc33fa0-1e6f-49c2-a80f-70197bb5627f",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.0912,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 16.585,
+          "log_count": 1,
+          "log_line": 33,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-03",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5596,
+            "content_id": "0ad31a72-5393-42e1-b1a7-c8825dc64e0d",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5993,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.735,
+          "log_count": 1,
+          "log_line": 34,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-04",
+          "body_bytes": 119,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4293,
+            "content_id": "00ccf63a-1d62-4daa-9a16-60cd949f4116",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3822,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.575,
+          "log_count": 1,
+          "log_line": 35,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-05",
+          "body_bytes": 116,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3629,
+            "content_id": "4f3e99b6-7cc1-41b3-a168-092ab279da48",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.2715,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 15.946,
+          "log_count": 1,
+          "log_line": 36,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-06",
+          "body_bytes": 120,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4156,
+            "content_id": "49d3127a-b46d-48a7-8a47-522cade21f99",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3593,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 24.325,
+          "log_count": 1,
+          "log_line": 37,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-07",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3112,
+            "content_id": "76f2efc7-cafd-4623-956f-75b3389c9165",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1854,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 19.143,
+          "log_count": 1,
+          "log_line": 38,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-08",
+          "body_bytes": 117,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3906,
+            "content_id": "fb98e526-535a-4cab-ab20-2a19616f3770",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1354,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 16.254,
+          "log_count": 1,
+          "log_line": 39,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-09",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3875,
+            "content_id": "7477b961-5531-4221-a0b0-b1a4584d7173",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3125,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.321,
+          "log_count": 1,
+          "log_line": 40,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-2-10",
+          "body_bytes": 119,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3578,
+            "content_id": "a884fb45-7d93-435e-ae79-76c9027a6b99",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.263,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.096,
+          "log_count": 1,
+          "log_line": 41,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        }
+      ],
+      "failures": [
+        {
+          "case": "empty-body",
+          "body_bytes": 0,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_json",
+            "message": "Send a JSON object."
+          },
+          "client_ms": 1.384,
+          "log_count": 1,
+          "log_line": 42,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 639,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_json"
+          },
+          "passed": true
+        },
+        {
+          "case": "malformed-json",
+          "body_bytes": 1,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_json",
+            "message": "Send a JSON object."
+          },
+          "client_ms": 0.704,
+          "log_count": 1,
+          "log_line": 43,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 640,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_json"
+          },
+          "passed": true
+        },
+        {
+          "case": "blank-text",
+          "body_bytes": 45,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_text",
+            "message": "text must be a nonblank string."
+          },
+          "client_ms": 0.634,
+          "log_count": 1,
+          "log_line": 44,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 641,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_text"
+          },
+          "passed": true
+        },
+        {
+          "case": "missing-creator",
+          "body_bytes": 50,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_creator_id",
+            "message": "creator_id must be a nonblank string of at most 128 characters."
+          },
+          "client_ms": 0.618,
+          "log_count": 1,
+          "log_line": 45,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 642,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_creator_id"
+          },
+          "passed": true
+        },
+        {
+          "case": "oversized-text",
+          "body_bytes": 10042,
+          "http_status": 413,
+          "response": {
+            "error": "text_too_long",
+            "message": "text may be at most 10,000 characters."
+          },
+          "client_ms": 0.878,
+          "log_count": 1,
+          "log_line": 46,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 643,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 413,
+            "error": "text_too_long"
+          },
+          "passed": true
+        }
+      ],
+      "preservation": [
+        {
+          "case": "capstone-prior-2-01",
+          "body_bytes": 686,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5933,
+            "content_id": "3f969e79-04b4-42e7-8977-e351c75aed44",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8381,
+            "status": "decided",
+            "style_score": 0.4595
+          },
+          "client_ms": 51.528,
+          "log_count": 1,
+          "log_line": 47,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5933,
+            "model_score": 0.8381,
+            "style_score": 0.4595
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-02",
+          "body_bytes": 808,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5375,
+            "content_id": "c0911b88-1619-4b52-b215-616a042f354e",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.6399,
+            "status": "decided",
+            "style_score": 0.3838
+          },
+          "client_ms": 50.133,
+          "log_count": 1,
+          "log_line": 48,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5375,
+            "model_score": 0.6399,
+            "style_score": 0.3838
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-03",
+          "body_bytes": 766,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5039,
+            "content_id": "5bcd70e3-ac48-44b4-8cd3-ceb04f5b3586",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5209,
+            "status": "decided",
+            "style_score": 0.4784
+          },
+          "client_ms": 49.614,
+          "log_count": 1,
+          "log_line": 49,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5039,
+            "model_score": 0.5209,
+            "style_score": 0.4784
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-04",
+          "body_bytes": 832,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4722,
+            "content_id": "a331d9c2-7ed3-46eb-99bf-9a06d64477a1",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5277,
+            "status": "decided",
+            "style_score": 0.389
+          },
+          "client_ms": 50.047,
+          "log_count": 1,
+          "log_line": 50,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4722,
+            "model_score": 0.5277,
+            "style_score": 0.389
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-05",
+          "body_bytes": 175,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3724,
+            "content_id": "4da2c0a9-e927-4950-a775-c0091e9f9792",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.0457,
+            "status": "decided",
+            "style_score": 0.5435
+          },
+          "client_ms": 28.466,
+          "log_count": 1,
+          "log_line": 51,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.3724,
+            "model_score": 0.0457,
+            "style_score": 0.5435
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-06",
+          "body_bytes": 724,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5577,
+            "content_id": "cc4d299e-19b6-415e-ae0e-33a460494066",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.6305,
+            "status": "decided",
+            "style_score": 0.4484
+          },
+          "client_ms": 44.501,
+          "log_count": 1,
+          "log_line": 52,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5577,
+            "model_score": 0.6305,
+            "style_score": 0.4484
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-07",
+          "body_bytes": 656,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4727,
+            "content_id": "b52d9239-8b02-48ca-9b43-31fdd1db6cb8",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.4134,
+            "status": "decided",
+            "style_score": 0.5617
+          },
+          "client_ms": 43.883,
+          "log_count": 1,
+          "log_line": 53,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4727,
+            "model_score": 0.4134,
+            "style_score": 0.5617
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-08",
+          "body_bytes": 705,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4194,
+            "content_id": "5df2fbf1-85ea-4e44-8909-44b6ad4e8875",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.4302,
+            "status": "decided",
+            "style_score": 0.4033
+          },
+          "client_ms": 44.685,
+          "log_count": 1,
+          "log_line": 54,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4194,
+            "model_score": 0.4302,
+            "style_score": 0.4033
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-09",
+          "body_bytes": 683,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4893,
+            "content_id": "55ea5e9b-b643-433d-9126-3d459f979ceb",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5211,
+            "status": "decided",
+            "style_score": 0.4417
+          },
+          "client_ms": 43.375,
+          "log_count": 1,
+          "log_line": 55,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4893,
+            "model_score": 0.5211,
+            "style_score": 0.4417
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-2-10",
+          "body_bytes": 725,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3665,
+            "content_id": "b4433409-5229-46be-8801-9c30335f02c2",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3273,
+            "status": "decided",
+            "style_score": 0.4254
+          },
+          "client_ms": 44.092,
+          "log_count": 1,
+          "log_line": 56,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.3665,
+            "model_score": 0.3273,
+            "style_score": 0.4254
+          },
+          "passed": true
+        }
+      ]
+    },
+    {
+      "trial": 3,
+      "startup_response": {
+        "ok": true,
+        "service": "provenance-guard",
+        "you_sent": "trial startup"
+      },
+      "worker_cpu": {
+        "before_warm_batch": {
+          "pid": 96771,
+          "readout": "0:01.62",
+          "cpu_seconds": 1.62
+        },
+        "after_warm_batch": {
+          "pid": 96771,
+          "readout": "0:01.84",
+          "cpu_seconds": 1.84
+        }
+      },
+      "counts": [
+        3,
+        10,
+        10,
+        5,
+        10
+      ],
+      "execution": [
+        {
+          "case": "capstone-start-3-01",
+          "body_bytes": 686,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5933,
+            "content_id": "5194fd30-177a-4c02-a2a9-b767a2f5cfae",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8381,
+            "status": "decided",
+            "style_score": 0.4595
+          },
+          "client_ms": 1343.597,
+          "log_count": 1,
+          "log_line": 57,
+          "passed": true
+        },
+        {
+          "case": "capstone-start-3-02",
+          "body_bytes": 659,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5524,
+            "content_id": "6cec0a17-2611-43a6-a158-0b3397f85edf",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.7832,
+            "status": "decided",
+            "style_score": 0.3374
+          },
+          "client_ms": 50.591,
+          "log_count": 1,
+          "log_line": 58,
+          "passed": true
+        },
+        {
+          "case": "capstone-start-3-03",
+          "body_bytes": 694,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.6003,
+            "content_id": "f8690af9-33d8-4e4c-8d8d-5550316a2b63",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8429,
+            "status": "decided",
+            "style_score": 0.487
+          },
+          "client_ms": 55.411,
+          "log_count": 1,
+          "log_line": 59,
+          "passed": true
+        }
+      ],
+      "logging": [
+        {
+          "case": "capstone-log-3-01",
+          "body_bytes": 122,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3894,
+            "content_id": "1651d156-12f1-4156-af5d-6d6eaf8dd81f",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1312,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 17.73,
+          "log_count": 1,
+          "log_line": 60,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-02",
+          "body_bytes": 116,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3774,
+            "content_id": "4568c57a-ea52-4b7f-b0ad-17b8fb8c75ed",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.0912,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 16.167,
+          "log_count": 1,
+          "log_line": 61,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-03",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5596,
+            "content_id": "b68b8031-14c8-4c2b-ab9e-de79b01b4ac9",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5993,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.457,
+          "log_count": 1,
+          "log_line": 62,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-04",
+          "body_bytes": 119,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4293,
+            "content_id": "832a925f-cedc-4811-865c-b33493e171d3",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3822,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.186,
+          "log_count": 1,
+          "log_line": 63,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-05",
+          "body_bytes": 116,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3629,
+            "content_id": "90b022eb-c907-4fd2-9871-44ceba29c263",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.2715,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 15.831,
+          "log_count": 1,
+          "log_line": 64,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-06",
+          "body_bytes": 120,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4156,
+            "content_id": "da32a5b2-896f-4dc3-ba77-d61e66b271e1",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3593,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.311,
+          "log_count": 1,
+          "log_line": 65,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-07",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3112,
+            "content_id": "90c71855-92ce-4bd9-a96e-e6774fc24a16",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1854,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 16.039,
+          "log_count": 1,
+          "log_line": 66,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-08",
+          "body_bytes": 117,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3906,
+            "content_id": "0fa6dd9c-5e24-42f1-9a00-f6dfa2cbc5b8",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.1354,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 15.958,
+          "log_count": 1,
+          "log_line": 67,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-09",
+          "body_bytes": 121,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3875,
+            "content_id": "f736a632-0abc-4162-8e19-9459f79d7158",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3125,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.053,
+          "log_count": 1,
+          "log_line": 68,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        },
+        {
+          "case": "capstone-log-3-10",
+          "body_bytes": 119,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3578,
+            "content_id": "e06aabe5-a848-4cd0-a920-9e1608014133",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.263,
+            "status": "decided",
+            "style_score": 0.5
+          },
+          "client_ms": 20.07,
+          "log_count": 1,
+          "log_line": 69,
+          "structured": true,
+          "input_matches": true,
+          "mismatched_response_fields": [],
+          "accurate": true
+        }
+      ],
+      "failures": [
+        {
+          "case": "empty-body",
+          "body_bytes": 0,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_json",
+            "message": "Send a JSON object."
+          },
+          "client_ms": 1.4,
+          "log_count": 1,
+          "log_line": 70,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 667,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_json"
+          },
+          "passed": true
+        },
+        {
+          "case": "malformed-json",
+          "body_bytes": 1,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_json",
+            "message": "Send a JSON object."
+          },
+          "client_ms": 0.708,
+          "log_count": 1,
+          "log_line": 71,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 668,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_json"
+          },
+          "passed": true
+        },
+        {
+          "case": "blank-text",
+          "body_bytes": 45,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_text",
+            "message": "text must be a nonblank string."
+          },
+          "client_ms": 0.639,
+          "log_count": 1,
+          "log_line": 72,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 669,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_text"
+          },
+          "passed": true
+        },
+        {
+          "case": "missing-creator",
+          "body_bytes": 50,
+          "http_status": 400,
+          "response": {
+            "error": "invalid_creator_id",
+            "message": "creator_id must be a nonblank string of at most 128 characters."
+          },
+          "client_ms": 0.623,
+          "log_count": 1,
+          "log_line": 73,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 670,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 400,
+            "error": "invalid_creator_id"
+          },
+          "passed": true
+        },
+        {
+          "case": "oversized-text",
+          "body_bytes": 10042,
+          "http_status": 413,
+          "response": {
+            "error": "text_too_long",
+            "message": "text may be at most 10,000 characters."
+          },
+          "client_ms": 0.671,
+          "log_count": 1,
+          "log_line": 74,
+          "health_after": {
+            "http_status": 200,
+            "response": {
+              "detector_loaded": true,
+              "detector_model": "gpt2",
+              "log_entries": 671,
+              "ok": true,
+              "rate_limiting": true
+            }
+          },
+          "expected": {
+            "http_status": 413,
+            "error": "text_too_long"
+          },
+          "passed": true
+        }
+      ],
+      "preservation": [
+        {
+          "case": "capstone-prior-3-01",
+          "body_bytes": 686,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5933,
+            "content_id": "3ace15fc-b0c4-4342-9a18-184fd7e04891",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.8381,
+            "status": "decided",
+            "style_score": 0.4595
+          },
+          "client_ms": 51.081,
+          "log_count": 1,
+          "log_line": 75,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5933,
+            "model_score": 0.8381,
+            "style_score": 0.4595
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-02",
+          "body_bytes": 808,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5375,
+            "content_id": "967c6ce4-5671-4819-84c9-8ed6579ff728",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.6399,
+            "status": "decided",
+            "style_score": 0.3838
+          },
+          "client_ms": 50.383,
+          "log_count": 1,
+          "log_line": 76,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5375,
+            "model_score": 0.6399,
+            "style_score": 0.3838
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-03",
+          "body_bytes": 766,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5039,
+            "content_id": "53775579-2fab-4022-8703-c5c948564f4d",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5209,
+            "status": "decided",
+            "style_score": 0.4784
+          },
+          "client_ms": 52.249,
+          "log_count": 1,
+          "log_line": 77,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5039,
+            "model_score": 0.5209,
+            "style_score": 0.4784
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-04",
+          "body_bytes": 832,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4722,
+            "content_id": "c183a182-3c57-4920-bdcc-6cf8f7dccffc",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5277,
+            "status": "decided",
+            "style_score": 0.389
+          },
+          "client_ms": 49.939,
+          "log_count": 1,
+          "log_line": 78,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4722,
+            "model_score": 0.5277,
+            "style_score": 0.389
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-05",
+          "body_bytes": 175,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3724,
+            "content_id": "45cf1a49-6712-4a9b-a7d3-18b2d1b3efa7",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.0457,
+            "status": "decided",
+            "style_score": 0.5435
+          },
+          "client_ms": 29.847,
+          "log_count": 1,
+          "log_line": 79,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.3724,
+            "model_score": 0.0457,
+            "style_score": 0.5435
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-06",
+          "body_bytes": 724,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.5577,
+            "content_id": "f2049660-a13d-42d2-a37e-af28751b2f56",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.6305,
+            "status": "decided",
+            "style_score": 0.4484
+          },
+          "client_ms": 46.003,
+          "log_count": 1,
+          "log_line": 80,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.5577,
+            "model_score": 0.6305,
+            "style_score": 0.4484
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-07",
+          "body_bytes": 656,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4727,
+            "content_id": "fb9474fc-7174-44a5-9bff-e4e8fba1d4b3",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.4134,
+            "status": "decided",
+            "style_score": 0.5617
+          },
+          "client_ms": 44.532,
+          "log_count": 1,
+          "log_line": 81,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4727,
+            "model_score": 0.4134,
+            "style_score": 0.5617
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-08",
+          "body_bytes": 705,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4194,
+            "content_id": "9bc3465d-8a62-49b5-b366-136087a6e7fe",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.4302,
+            "status": "decided",
+            "style_score": 0.4033
+          },
+          "client_ms": 44.98,
+          "log_count": 1,
+          "log_line": 82,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4194,
+            "model_score": 0.4302,
+            "style_score": 0.4033
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-09",
+          "body_bytes": 683,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.4893,
+            "content_id": "0ad5d0a5-5e03-4ee1-8d51-a5868d22ec58",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.5211,
+            "status": "decided",
+            "style_score": 0.4417
+          },
+          "client_ms": 44.368,
+          "log_count": 1,
+          "log_line": 83,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.4893,
+            "model_score": 0.5211,
+            "style_score": 0.4417
+          },
+          "passed": true
+        },
+        {
+          "case": "capstone-prior-3-10",
+          "body_bytes": 725,
+          "http_status": 200,
+          "response": {
+            "confidence": 0.3665,
+            "content_id": "b34d3624-64a0-4c72-9585-a0f9f95aa161",
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "model_score": 0.3273,
+            "status": "decided",
+            "style_score": 0.4254
+          },
+          "client_ms": 44.785,
+          "log_count": 1,
+          "log_line": 84,
+          "expected": {
+            "guess": "unsure",
+            "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.",
+            "confidence": 0.3665,
+            "model_score": 0.3273,
+            "style_score": 0.4254
+          },
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

@@ -2356,7 +2356,185 @@ without changing the earlier system's judgments.
 **Running It**
 
 This uses Path B: a local Gunicorn service started by the single command in
-[RUNNING.md](RUNNING.md). I verified the pinned setup in a fresh checkout and
-received a real `/ping` response from the running server. The local `gpt2`
-model stays on the machine; submissions will be recorded in
-`logs/runs.jsonl`.
+[RUNNING.md](RUNNING.md). The baseline ran from a fresh checkout after
+installing the pinned dependencies. The after trials used a second clean
+checkout with the same Python environment. Each trial started a fresh worker
+and scored submissions with the cached GPT-2 model.
+
+**Instrumentation**
+
+`app.py::record_submission_run` adds a record for each `POST /submit`,
+including a rejection. `runlog.py::log_submission` appends it to
+`logs/runs.jsonl`. Each record has a UTC timestamp, input summary, HTTP
+status and JSON response fields under `output`, and elapsed handler time in
+`duration_ms`. The input summary pairs a SHA-256 fingerprint of the
+original text with the creator ID, character count, body byte count, and
+content type. The timer stops when the response is ready, before the record
+is appended.
+
+Ten completed submissions and an empty-body rejection from the first after
+trial appear below in request order. The full log contains 84 submissions
+from three local server processes. [After structured log](results/capstone-after-runs.jsonl)
+
+```jsonl
+{"timestamp": "2026-11-18T22:14:01.407+00:00", "input": {"creator_id": "capstone-log-1-01", "text_chars": 78, "text_sha256": "dad30d2822aa28d8bcd9084a793a09d1f3abf45329054691a31ed251c32c2d03", "body_bytes": 122, "content_type": "application/json"}, "output": {"confidence": 0.3894, "content_id": "64fb203a-9ef8-4dcf-aa14-f339ae1b763f", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.1312, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 16.691}
+{"timestamp": "2026-11-18T22:14:01.424+00:00", "input": {"creator_id": "capstone-log-1-02", "text_chars": 71, "text_sha256": "41cd37b13ac44a57205df8be14d5b0aca16774ffb911c0d966e43e53eeecb417", "body_bytes": 116, "content_type": "application/json"}, "output": {"confidence": 0.3774, "content_id": "86a2d05a-c5b4-4575-9e27-acd6da88837e", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.0912, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 15.622}
+{"timestamp": "2026-11-18T22:14:01.445+00:00", "input": {"creator_id": "capstone-log-1-03", "text_chars": 76, "text_sha256": "f75a5e9fd2929100fbda80937ddf2a08e65c8da4838601ca2ad43344a2f51669", "body_bytes": 121, "content_type": "application/json"}, "output": {"confidence": 0.5596, "content_id": "8c186a28-83ec-4297-919f-6b7a89b1b094", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.5993, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 19.945}
+{"timestamp": "2026-11-18T22:14:01.466+00:00", "input": {"creator_id": "capstone-log-1-04", "text_chars": 73, "text_sha256": "e6886ebee05b8180ec9f4307580309f26de657bae896d33fe43dad5a4464ca5f", "body_bytes": 119, "content_type": "application/json"}, "output": {"confidence": 0.4293, "content_id": "099c8e1d-c984-45fa-97fa-446c9dcc57de", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.3822, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 19.88}
+{"timestamp": "2026-11-18T22:14:01.483+00:00", "input": {"creator_id": "capstone-log-1-05", "text_chars": 72, "text_sha256": "8cddf5d379d8036cc61cbc8c303464dbd1d277f3ec8e743dd4fba2a9dad59c31", "body_bytes": 116, "content_type": "application/json"}, "output": {"confidence": 0.3629, "content_id": "7e30acb8-422e-4998-bd26-1cb8c386d111", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.2715, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 15.559}
+{"timestamp": "2026-11-18T22:14:01.504+00:00", "input": {"creator_id": "capstone-log-1-06", "text_chars": 76, "text_sha256": "96f32110455358f879ab7cdf090c5d7f3303e780e67ae1c404f7429f21cf41c1", "body_bytes": 120, "content_type": "application/json"}, "output": {"confidence": 0.4156, "content_id": "531e5b2d-e912-4467-b7ba-fe5f65b09915", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.3593, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 20.361}
+{"timestamp": "2026-11-18T22:14:01.521+00:00", "input": {"creator_id": "capstone-log-1-07", "text_chars": 77, "text_sha256": "c6313478c5f8657ce8bb8383575c2668e2ca42306eb9551993ad43704bd3fb5a", "body_bytes": 121, "content_type": "application/json"}, "output": {"confidence": 0.3112, "content_id": "2de07403-ccf8-429f-90c9-4a15232855cd", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.1854, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 15.369}
+{"timestamp": "2026-11-18T22:14:01.537+00:00", "input": {"creator_id": "capstone-log-1-08", "text_chars": 73, "text_sha256": "df2f7e1ae81f17d83e14a4b88c176e0f599862aa06af8fa94344781aaf23e019", "body_bytes": 117, "content_type": "application/json"}, "output": {"confidence": 0.3906, "content_id": "364bb478-3653-4f7e-9af1-95396a708bd0", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.1354, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 15.582}
+{"timestamp": "2026-11-18T22:14:01.561+00:00", "input": {"creator_id": "capstone-log-1-09", "text_chars": 77, "text_sha256": "30a38c33cd441b3a73af259f52e0d78409baf8d0b28546f67bde2099027bbd0e", "body_bytes": 121, "content_type": "application/json"}, "output": {"confidence": 0.3875, "content_id": "802f0018-f178-4598-a2ab-f7ddf908c76b", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.3125, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 22.39}
+{"timestamp": "2026-11-18T22:14:01.587+00:00", "input": {"creator_id": "capstone-log-1-10", "text_chars": 75, "text_sha256": "936aff0a4951d101699dae1dd5e4f7fd3bd4979ffb201105b1dfcf493de541ca", "body_bytes": 119, "content_type": "application/json"}, "output": {"confidence": 0.3578, "content_id": "ae1285c3-645b-40fe-b71e-3570dae4b9a9", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.263, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 25.467}
+{"timestamp": "2026-11-18T22:14:01.604+00:00", "input": {"creator_id": null, "text_chars": null, "text_sha256": null, "body_bytes": 0, "content_type": "application/json"}, "output": {"error": "invalid_json", "message": "Send a JSON object.", "http_status": 400, "content_id": null, "guess": null, "label": null}, "duration_ms": 0.304}
+```
+
+**What It Costs**
+
+The ten sequential warm submissions in the first after trial averaged
+**0.024 CPU seconds per submission**. I used the macOS `ps` CPU-time
+field on the Gunicorn worker immediately before and after the batch. Its
+combined user and system CPU time increased from 1.86 to 2.10
+seconds. The model was already loaded for this batch.
+
+- Per submission, (2.10 − 1.86) ÷ 10 = **0.024 CPU seconds**.
+- For 100 people submitting once per day, 100 × 0.024 =
+  **2.40 CPU seconds per day**.
+
+The worker readings and all ten requests are recorded in the after evidence.
+[After request results](results/capstone-after.json)
+
+**Run Log and Verdicts**
+
+The [five criteria](criteria.md) were committed in `8acb614`. The request
+sets and scoring rules were committed in `a59f98f` before the baseline.
+The runner restarted the service for each trial and applied every target
+independently to all three trials. Criteria 2 and 3 share their ten requests.
+Criterion 3 compares the input fingerprint and metadata, HTTP status, and
+every returned JSON field. Criterion 5 replays ten prior Unit 8 cases and
+compares each decision with its previously recorded output.
+[Fixed evaluation method](docs/superpowers/plans/2026-11-13-capstone-observable-runs.md#fixed-evaluation-method)
+
+| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Local Execution | 3/3 | 3/3 | 3/3 | 3/3 | MET |
+| 2. Structured Logging | 10/10 | 10/10 | 10/10 | 10/10 | MET |
+| 3. Logging Accuracy | ≥9/10 | 0/10 | 0/10 | 0/10 | MISSED |
+| 4. Failure Handling and Logging | 5/5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Existing Functionality Preservation | ≥9/10 | 10/10 | 10/10 | 10/10 | MET |
+
+Logging Accuracy missed in all three baseline trials. All 30 request
+summaries matched. `app.py::record_submission_run` passed the complete
+JSON body to `runlog.py::log_submission`. The run-log writer selected only
+the content ID, guess, label, and error from that body, so every successful
+record omitted `confidence`, `model_score`, `style_score`, and `status`.
+The first results were committed in `666bb29`.
+[Before request results](results/capstone-before.json) ·
+[Before structured log](results/capstone-before-runs.jsonl)
+
+Criterion 1, trial 1. `app.py::submit` returned HTTP 200.
+
+```json
+{"confidence":0.5933,"content_id":"01de73e2-20af-4e07-ade0-a004fa59f6f5","guess":"unsure","label":"Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.","model_score":0.8381,"status":"decided","style_score":0.4595}
+```
+
+Criteria 2 and 3, trial 1. The first line is the HTTP 200
+JSON body from `app.py::submit`. The second line is its record from
+`runlog.py::log_submission`.
+
+```jsonl
+{"confidence":0.3894,"content_id":"ce0e7f77-bb54-4748-a56f-ea7cb7385f78","guess":"unsure","label":"Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.","model_score":0.1312,"status":"decided","style_score":0.5}
+{"timestamp": "2026-11-18T22:11:35.253+00:00", "input": {"creator_id": "capstone-log-1-01", "text_chars": 78, "text_sha256": "dad30d2822aa28d8bcd9084a793a09d1f3abf45329054691a31ed251c32c2d03", "body_bytes": 122, "content_type": "application/json"}, "output": {"http_status": 200, "content_id": "ce0e7f77-bb54-4748-a56f-ea7cb7385f78", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "error": null}, "duration_ms": 16.497}
+```
+
+Criterion 4, trial 1. `app.py::submit` returned HTTP 400
+for an empty body. `runlog.py::log_submission` recorded the rejection.
+
+```jsonl
+{"error":"invalid_json","message":"Send a JSON object."}
+{"timestamp": "2026-11-18T22:11:35.442+00:00", "input": {"creator_id": null, "text_chars": null, "text_sha256": null, "body_bytes": 0, "content_type": "application/json"}, "output": {"http_status": 400, "content_id": null, "guess": null, "label": null, "error": "invalid_json"}, "duration_ms": 0.423}
+```
+
+Criterion 5, trial 1. `app.py::submit` returned HTTP 200
+for the fifth Unit 8 input. `capstone_eval.py::trial_requests` compared the
+guess, label, and three scores with the saved expectation.
+
+```json
+{"confidence":0.3724,"content_id":"c132926f-12ef-4507-b349-5bf9c98d0336","guess":"unsure","label":"Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.","model_score":0.0457,"status":"decided","style_score":0.5435}
+```
+
+**The Improvement**
+
+The change in `2656533` copies every field of the JSON response into the
+log's `output` alongside its HTTP status. The baseline showed that an
+operator could find the decision by ID and still have to look elsewhere
+for the scores. The complete response makes those values available from the
+run record. The same requests and scoring ran again in three new trials.
+
+| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Local Execution | 3/3 | 3/3 | 3/3 | 3/3 | MET |
+| 2. Structured Logging | 10/10 | 10/10 | 10/10 | 10/10 | MET |
+| 3. Logging Accuracy | ≥9/10 | 10/10 | 10/10 | 10/10 | MET |
+| 4. Failure Handling and Logging | 5/5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Existing Functionality Preservation | ≥9/10 | 10/10 | 10/10 | 10/10 | MET |
+
+Logging Accuracy rose from 0/10 to 10/10 in each trial. All five targets
+were met in the rerun. The ten warm records in trial 1 took 5,290
+bytes before and 6,147 bytes after. The two sets of response
+records and the raw JSONL show the added fields.
+[After request results](results/capstone-after.json) ·
+[After structured log](results/capstone-after-runs.jsonl)
+
+Criterion 1, trial 1. `app.py::submit` returned HTTP 200.
+
+```json
+{"confidence":0.5933,"content_id":"a543b443-a1ff-4378-8ff3-790518eebaed","guess":"unsure","label":"Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.","model_score":0.8381,"status":"decided","style_score":0.4595}
+```
+
+Criteria 2 and 3, trial 1. The first line is the HTTP 200
+JSON body from `app.py::submit`. The second line is its record from
+`runlog.py::log_submission`.
+
+```jsonl
+{"confidence":0.3894,"content_id":"64fb203a-9ef8-4dcf-aa14-f339ae1b763f","guess":"unsure","label":"Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.","model_score":0.1312,"status":"decided","style_score":0.5}
+{"timestamp": "2026-11-18T22:14:01.407+00:00", "input": {"creator_id": "capstone-log-1-01", "text_chars": 78, "text_sha256": "dad30d2822aa28d8bcd9084a793a09d1f3abf45329054691a31ed251c32c2d03", "body_bytes": 122, "content_type": "application/json"}, "output": {"confidence": 0.3894, "content_id": "64fb203a-9ef8-4dcf-aa14-f339ae1b763f", "guess": "unsure", "label": "Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.", "model_score": 0.1312, "status": "decided", "style_score": 0.5, "http_status": 200, "error": null}, "duration_ms": 16.691}
+```
+
+Criterion 4, trial 1. `app.py::submit` returned HTTP 400
+for an empty body. `runlog.py::log_submission` recorded the rejection.
+
+```jsonl
+{"error":"invalid_json","message":"Send a JSON object."}
+{"timestamp": "2026-11-18T22:14:01.604+00:00", "input": {"creator_id": null, "text_chars": null, "text_sha256": null, "body_bytes": 0, "content_type": "application/json"}, "output": {"error": "invalid_json", "message": "Send a JSON object.", "http_status": 400, "content_id": null, "guess": null, "label": null}, "duration_ms": 0.304}
+```
+
+Criterion 5, trial 1. `app.py::submit` returned HTTP 200
+for the fifth Unit 8 input. `capstone_eval.py::trial_requests` compared the
+guess, label, and three scores with the saved expectation.
+
+```json
+{"confidence":0.3724,"content_id":"7e5456f3-c53c-4b7d-a3c4-0fa36d592fbf","guess":"unsure","label":"Our checks cannot tell who wrote this with enough confidence. No authorship claim is being made, and the creator can appeal.","model_score":0.0457,"status":"decided","style_score":0.5435}
+```
+
+**What's Still Broken**
+
+I would tighten Logging Accuracy from 9/10 to 10/10 in each trial. One
+mismatched record can undermine the investigation of that submission. I
+stopped after measuring the single change that addressed the baseline miss.
+
+With another unit, I would first run the local service with an unavailable
+model and check whether a real HTTP 503 leaves a complete run record. That
+would extend the failure evidence to a service-side failure.
+
+**How I Used AI**
+
+1. I gave an AI assistant the capstone brief and asked for help extending
+   Provenance Guard. It scoped and implemented the local Gunicorn run path
+   and timed JSONL records. I kept that scope and supplied the five
+   acceptance criteria in my own words before the measured trials.
+2. I supplied my criteria for evaluation. The assistant built a repeatable
+   trial runner and traced the baseline accuracy miss to the response fields
+   dropped by the logger. I kept the complete-response logging change and
+   both measured result sets in the capstone.
