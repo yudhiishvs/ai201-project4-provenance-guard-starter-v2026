@@ -54,8 +54,9 @@ class CapstoneRunTests(unittest.TestCase):
             entry["input"]["text_sha256"], hashlib.sha256(submitted_text.encode()).hexdigest()
         )
         self.assertEqual(entry["output"]["http_status"], 200)
-        self.assertEqual(entry["output"]["content_id"], response.get_json()["content_id"])
-        self.assertEqual(entry["output"]["guess"], response.get_json()["guess"])
+        for field, value in response.get_json().items():
+            self.assertIn(field, entry["output"])
+            self.assertEqual(entry["output"][field], value)
         self.assertNotIn(submitted_text, run_file.read_text())
 
     def test_invalid_submission_records_its_rejection(self):
@@ -69,6 +70,7 @@ class CapstoneRunTests(unittest.TestCase):
         self.assertEqual(entries[0]["input"]["creator_id"], "bad-input-writer")
         self.assertEqual(entries[0]["output"]["http_status"], 400)
         self.assertEqual(entries[0]["output"]["error"], "invalid_text")
+        self.assertEqual(entries[0]["output"].get("message"), response.get_json()["message"])
         self.assertGreaterEqual(entries[0]["duration_ms"], 0)
 
     def test_rate_limited_submission_records_the_429(self):

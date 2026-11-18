@@ -12,7 +12,7 @@ _lock = threading.Lock()
 
 
 def log_submission(payload, response_body, status_code, duration_ms, body_bytes, content_type):
-    """Record the request and response without storing submitted prose."""
+    """Record request metadata and the JSON response for one submission."""
     fields = payload if isinstance(payload, dict) else {}
     submitted_text = fields.get("text")
     creator_id = fields.get("creator_id")
@@ -30,6 +30,7 @@ def log_submission(payload, response_body, status_code, duration_ms, body_bytes,
             "content_type": content_type,
         },
         "output": {
+            **output,
             "http_status": status_code,
             "content_id": output.get("content_id"),
             "guess": output.get("guess"),

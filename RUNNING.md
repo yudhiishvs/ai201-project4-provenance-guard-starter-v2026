@@ -350,10 +350,12 @@ curl -sS -i http://127.0.0.1:5000/submit \
 Each `POST /submit`, including a rejected one,
 appends one JSON object to `logs/runs.jsonl`. Its `input` summarizes the
 request by creator ID, character count, byte count, content type, and SHA-256
-fingerprint; it does not keep submitted prose. Its `output` includes HTTP
-status, decision identifiers when present, and an error code for a rejection.
-`duration_ms` measures elapsed request time with a monotonic clock. The
-earlier `logs/audit.jsonl` remains the decision and appeal audit trail.
+fingerprint. Its `output` includes the HTTP status and all fields from the
+JSON response. Decision identifiers are null for rejections.
+`duration_ms` measures elapsed request time from the Flask request hook
+until the response is ready, using a monotonic clock. The run record is
+appended immediately after that measurement. Decision and appeal history is
+available in `logs/audit.jsonl`.
 
 To repeat the three-trial evaluation, use a separate clean checkout with
 the same setup and port 5000 free. The runner starts and stops the server
