@@ -339,11 +339,28 @@ From the repository root, **this one command starts the capstone service**:
 HF_HUB_OFFLINE=1 ./.venv/bin/gunicorn app:app --bind 127.0.0.1:5000 --workers 1 --threads 1
 ```
 
-Leave it running and, in another terminal, use the existing `/ping` and
-`/submit` requests above. Each `POST /submit`, including a rejected one,
+Leave it running and send a submission from a second terminal.
+
+```bash
+curl -sS -i http://127.0.0.1:5000/submit \
+  -H 'Content-Type: application/json' \
+  -d '{"creator_id":"local-example","text":"I walked home after class and stopped at the library to return two books."}'
+```
+
+Each `POST /submit`, including a rejected one,
 appends one JSON object to `logs/runs.jsonl`. Its `input` summarizes the
 request by creator ID, character count, byte count, content type, and SHA-256
 fingerprint; it does not keep submitted prose. Its `output` includes HTTP
 status, decision identifiers when present, and an error code for a rejection.
 `duration_ms` measures elapsed request time with a monotonic clock. The
 earlier `logs/audit.jsonl` remains the decision and appeal audit trail.
+
+To repeat the three-trial evaluation, use a separate clean checkout with
+the same setup and port 5000 free. The runner starts and stops the server
+itself and leaves the raw run log and request results in the supplied
+directory. Use `before` for the baseline revision and `after` for the
+revision with the improvement.
+
+```bash
+./.venv/bin/python capstone_eval.py after /tmp/provenance-capstone-evidence
+```
