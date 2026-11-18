@@ -1,61 +1,33 @@
-# Acceptance criteria — Provenance Guard
+# Capstone Acceptance Criteria
 
-These five targets were set before any detector or submission results were
-examined.
+## 1. Local Execution
 
-For text-based trials, freeze the test pieces and their known provenance
-before the first run. Apply the targets independently to each of the three
-trials in the next unit, without changing thresholds between trials.
+The Provenance Guard system must start using the documented command in RUNNING.md and successfully process at least 3 out of 3 valid requests without requiring changes to the source code.
 
-## 1. Limit false accusations of human writing
+Reason: A reproducible local run demonstrates that the system can operate outside the development environment and that another person can follow the setup instructions.
 
-Of 20 preselected human-written pieces of 80–200 words, including at least
-five deliberately plain pieces, **at most one** may receive the
-high-confidence AI label in each trial.
+## 2. Structured Logging
 
-**Why this target:** A wrong accusation has a direct cost for the writer. A
-5% ceiling is demanding enough to reveal whether ordinary prose is being
-mistaken for generated text.
+At least 10 out of 10 requests must produce structured log records containing a timestamp, input, output, execution duration, and status.
 
-## 2. Separate known AI and human samples
+Reason: Every request needs a complete record so that system behavior can be inspected and evaluated after execution.
 
-For ten preselected AI-generated pieces and ten preselected human-written
-pieces of 80–200 words, the **median combined AI-likelihood score** of the AI
-group must exceed the human group's median by **at least 0.15** in each trial.
+## 3. Logging Accuracy
 
-**Why this target:** A score spread smaller than 0.15 gives the site little
-practical reason to use the detector, even if most individual labels say
-"unsure." Group medians avoid letting one odd sample decide the result.
+For at least 9 out of 10 requests, the input and output recorded in the structured log must match the actual submitted input and returned response, and the recorded duration must be nonnegative.
 
-## 3. Make all three labels reachable
+Reason: Logs are only useful for debugging and evaluation if they accurately represent what happened during execution.
 
-Across a frozen set of **at least 12** mixed-provenance submissions, each of
-`human`, `unsure`, and `ai` must appear **at least once** in each trial.
-Separately, `score_to_label` must return one of those three labels for every
-score in **0.00, 0.01, ..., 1.00**, with no gap or exception.
+## 4. Failure Handling and Logging
 
-**Why this target:** The service promises three reader-facing outcomes. A
-label that no real submission can reach is not a working option, while the
-grid check catches holes at threshold boundaries.
+At least 5 out of 5 deliberately malformed or empty requests must produce a controlled rejection or error response without terminating the application. Each rejected request must also generate a structured log record identifying the failure.
 
-## 4. Preserve every valid appeal
+Reason: Invalid inputs should not crash the system or disappear from its execution history. Recording failures makes it possible to identify and diagnose problems.
 
-For **ten** valid, distinct `content_id` values, **ten of ten** appeals must
-return `under_review` and append an appeal event containing the submitted
-reasoning. Each original decision and its two signal scores must remain in
-the audit log unchanged. An unknown id must return **404** and append no
-appeal event.
+## 5. Existing Functionality Preservation
 
-**Why this target:** An appeal is a writer's only way to challenge a false
-accusation. Losing even one would undermine the safety of the workflow.
+At least 9 out of 10 previously valid Provenance Guard test inputs must continue to produce their expected results after the local execution and logging extensions are added.
 
-## 5. Reject malformed or oversized submissions predictably
+Reason: Adding operational capabilities should not compromise the system's original provenance-checking behavior. This criterion checks that the extension does not introduce regressions.
 
-For each of these **six** inputs — no JSON object, missing `text`, blank
-`text`, non-string `text`, missing `creator_id`, and text over **10,000
-characters** — `POST /submit` must return JSON with an `error` and `message`,
-use **400** or **413**, create **zero decision entries**, and never return 500.
-
-**Why this target:** Bad input should be a clear caller error, not an
-expensive model call or an unexplained server failure. The size cap also
-limits work a single request can impose.
+The earlier project targets are preserved in [Unit 8 acceptance criteria](docs/unit8-criteria.md).
